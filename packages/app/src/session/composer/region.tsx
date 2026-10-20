@@ -182,7 +182,10 @@ export function createActiveSessionRegion(input: {
       return
     }
 
-    if (event.key.length !== 1 || event.key === "Unidentified" || event.ctrlKey || event.metaKey) return
+    // Focusing on the ⌘V keydown makes the browser's paste land in the composer through its normal paste path.
+    const paste = (event.metaKey || event.ctrlKey) && !event.altKey && event.key.toLowerCase() === "v"
+
+    if (event.key.length !== 1 || event.key === "Unidentified" || ((event.ctrlKey || event.metaKey) && !paste)) return
 
     if (state.blocked() || input.session.data.isChild() || !promptRef) return
     promptRef.focus()

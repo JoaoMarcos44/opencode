@@ -697,3 +697,31 @@ test("shows thinking on hover or a non-default selection while preserving keyboa
   await page.keyboard.press("Tab")
   await expect(control).toHaveCSS("opacity", "0")
 })
+
+test("pastes into the composer from the session view but not into other inputs", async ({ page }) => {
+  const prompts: unknown[] = []
+  const { editor } = await openSession(page, { name: "PasteFocus", onPrompt: (input) => void prompts.push(input.body) })
+  await editor.fill("hello")
+  await editor.press("Enter")
+  await expect.poll(() => prompts.length).toBe(1)
+  const message = page.locator('[data-timeline-row="UserMessage"]')
+  await message.click()
+  await expect(editor).not.toBeFocused()
+
+  await page.evaluate(() => navigator.clipboard.writeText("pasted from the timeline"))
+  await page.keyboard.press("ControlOrMeta+V")
+  await expect(editor).toBeFocused()
+  await expect.poll(() => editor.innerText()).toBe("pasted from the timeline")
+
+  await editor.blur()
+  await page.evaluate(() => {
+    const field = document.createElement("input")
+    field.id = "elsewhere"
+    document.body.append(field)
+    field.focus()
+  })
+  await page.keyboard.press("ControlOrMeta+V")
+  await expect(page.locator("#elsewhere")).toHaveValue("pasted from the timeline")
+  await expect(page.locator("#elsewhere")).toBeFocused()
+  await expect.poll(() => editor.innerText()).toBe("pasted from the timeline")
+})
