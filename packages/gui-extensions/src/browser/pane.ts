@@ -185,21 +185,21 @@ export function createBrowserPane(input: {
                 rpc.result({ ...attachment, requestID, outcome: Schema.encodeSync(Browser.Outcome)(outcome) }, options),
               )
 
-            // Report state before publishing it locally or completing a command. The server's copy of
-            // the inventory resolves every tab ID, so a state is retried until it arrives or the
-            // attachment ends; the results queued behind it then never name a tab the server lacks.
-            // "unavailable" means the server already dropped this attachment, which attach reports.
+            // The window hears every event at once; it never waits on the server, which can stall for
+            // hundreds of milliseconds while it serves the page's own traffic. The server's copy of the
+            // inventory resolves every tab ID, so a state is retried until it arrives or the attachment
+            // ends; the results queued behind it then never name a tab the server lacks. "unavailable"
+            // means the server already dropped this attachment, which attach reports.
             entry.report = (event) => {
-              const local = Effect.sync(() => publish(entry, event))
+              publish(entry, event)
 
-              if (event.type !== "state") return send(local)
+              if (event.type !== "state") return
               send(
                 rpc.state({ ...attachment, state: event.state ?? { tabs: [], focusedTabID: null } }, options).pipe(
                   Effect.retry({
                     while: (error) => !("type" in error && error.type === "unavailable"),
                     schedule: Schedule.min([Schedule.exponential("250 millis"), Schedule.spaced("10 seconds")]),
                   }),
-                  Effect.ensuring(local),
                 ),
               )
             }
@@ -341,7 +341,11 @@ export function createBrowserPane(input: {
       const reason = url === undefined ? undefined : refusal(url, { fileRoots: entry.fileRoots })
 
       if (reason) throw new Error(reason)
-      await execute(entry, { action: command, files: [] }, new AbortController().signal)
+      // A navigation that the next one replaced, such as a second submit or a redirect, rejects with ERR_ABORTED while
+      // the tab goes on loading. It is not a failed request; a page that fails to load reports its own error.
+      await execute(entry, { action: command, files: [] }, new AbortController().signal).catch((error: Error) => {
+        if (!("code" in error) || error.code !== "ERR_ABORTED") throw error
+      })
     },
     async close(window: number, binding: string) {
       const entry = owned(window, binding)
@@ -494,8 +498,8 @@ export function createBrowserPane(input: {
       inspect: (event) => {
         if (entry.pages.has(id)) report(entry, { type: "inspect", tabID: id, ...event })
       },
-      // Icons and zoom are local to this desktop, but wait behind the states reported before them, so the window files
-      // a new page's icon under that page's URL.
+      // Icons and zoom are local to this desktop, and follow the states reported before them, so the window files a new
+      // page's icon under that page's URL.
       detail: (value) => {
         if (entry.pages.has(id)) report(entry, { type: "page", tabID: id, ...value })
       },
@@ -555,12 +559,19 @@ export function createBrowserPane(input: {
     if (action.type === "tabs.open") {
       const page = create(entry)
 
+      // A new page already loads about:blank. A blank tab is selected once that load finishes, so the window switches
+      // straight from the previous page to the new tab page, with no loading frame between them.
+      if (action.url === undefined) {
+        await page.ready
+
+        if (action.focus !== false) focus(entry, page.state().id)
+
+        return { value: page.state(), files: [] }
+      }
+
       if (action.focus !== false) focus(entry, page.state().id)
       await page.ready
-      await page.execute(
-        { action: { type: "navigate", tabID: page.state().id, url: action.url ?? "about:blank" }, files: [] },
-        signal,
-      )
+      await page.execute({ action: { type: "navigate", tabID: page.state().id, url: action.url }, files: [] }, signal)
       publishState(entry)
 
       return { value: page.state(), files: [] }

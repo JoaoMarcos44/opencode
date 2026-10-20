@@ -302,25 +302,28 @@ export function createModel(ctx: SetupContext<typeof definition>) {
       )
 
       // A new tab holds the place of the tab the user picks next: once another tab is selected, it closes unless a
-      // page started loading in it. It leaves the strip in the same update, so the picked tab takes its place without
-      // waiting for the desktop to close its page.
-      createKeyed(
-        () =>
-          state.attachments[id]?.browser?.tabs.find((item) => {
-            const placement = layout.state(key(item.id), ref)
+      // page started loading in it, or the pick is another new tab (mod+t on a new tab page adds one, as in a
+      // browser). It leaves the strip in the same update, so the picked tab takes its place without waiting for the
+      // desktop to close its page.
+      const shownBlank = () =>
+        state.attachments[id]?.browser?.tabs.find((item) => {
+          const placement = layout.state(key(item.id), ref)
 
-            return blank(item) && (placement === "visible" || placement === "active")
-          })?.id,
-        (tabID) =>
-          onCleanup(() => {
-            const item = state.attachments[id]?.browser?.tabs.find((candidate) => candidate.id === tabID)
+          return blank(item) && (placement === "visible" || placement === "active")
+        })?.id
 
-            if (live.get(id) !== entry || !item || !blank(item) || layout.state(key(tabID), ref) !== "open") return
-            layout.close(key(tabID), ref)
+      createKeyed(shownBlank, (tabID) =>
+        onCleanup(() => {
+          const item = state.attachments[id]?.browser?.tabs.find((candidate) => candidate.id === tabID)
 
-            // The host calls the panel's `close` for the routed session only; another session's page closes here.
-            if (sessions.current()?.key !== ref.key) command(ref, { type: "tabs.close", tabID })
-          }),
+          if (live.get(id) !== entry || !item || !blank(item) || layout.state(key(tabID), ref) !== "open") return
+
+          if (shownBlank()) return
+          layout.close(key(tabID), ref)
+
+          // The host calls the panel's `close` for the routed session only; another session's page closes here.
+          if (sessions.current()?.key !== ref.key) command(ref, { type: "tabs.close", tabID })
+        }),
       )
 
       // Previews made while another session was on screen open once the user returns to this one.

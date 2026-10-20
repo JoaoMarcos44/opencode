@@ -837,6 +837,17 @@ export function mountBrowserRegion(input: RegionHost) {
 
     const listeners = new Set<(value: { binding: string; event: PaneEvent }) => void>()
 
+    // The page main reports for a tab.
+    const tab = (id: Browser.TabID) => ({
+      id,
+      url: store.blank ? "about:blank" : "http://localhost:4173/",
+      title: store.blank ? "" : "Preview",
+      loading: false,
+      canGoBack: false,
+      canGoForward: false,
+      generation: 0,
+    })
+
     const pane: PaneClient = {
       register: async (value) => {
         setStore("registrations", (items) => [
@@ -848,11 +859,19 @@ export function mountBrowserRegion(input: RegionHost) {
       command: async (value) => {
         if (value.command.type === "tabs.open") setStore("opens", (count) => count + 1)
 
+        // As main answers a new tab beside a blank page: the new blank tab joins the inventory and is selected.
+        if (value.command.type === "tabs.open" && !value.command.url && store.blank) {
+          const opened = Browser.TabID.make(`tab_44444444-4444-4444-4444-${String(store.opens).padStart(12, "0")}`)
+          const state = { tabs: [tab(tabID), tab(opened)], focusedTabID: opened }
+          listeners.forEach((listener) => listener({ binding: value.binding, event: { type: "state", state } }))
+          listeners.forEach((listener) => listener({ binding: value.binding, event: { type: "focus", tabID: opened } }))
+        }
+
         if (value.command.type !== "tabs.close") return
 
-        const tabID = value.command.tabID
+        const closed = value.command.tabID
 
-        setStore("closes", (items) => [...items, tabID])
+        setStore("closes", (items) => [...items, closed])
         listeners.forEach((listener) =>
           listener({ binding: value.binding, event: { type: "state", state: { tabs: [], focusedTabID: null } } }),
         )
@@ -903,18 +922,8 @@ export function mountBrowserRegion(input: RegionHost) {
 
       if (!binding) return
 
-      const tab = {
-        id: tabID,
-        url: store.blank ? "about:blank" : "http://localhost:4173/",
-        title: store.blank ? "" : "Preview",
-        loading: false,
-        canGoBack: false,
-        canGoForward: false,
-        generation: 0,
-      }
-
       listeners.forEach((listener) =>
-        listener({ binding, event: { type: "state", state: { tabs: [tab], focusedTabID: tabID } } }),
+        listener({ binding, event: { type: "state", state: { tabs: [tab(tabID)], focusedTabID: tabID } } }),
       )
     }
 
