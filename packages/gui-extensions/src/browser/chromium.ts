@@ -7,7 +7,7 @@ import { createCdp, abortError, waitFor } from "./cdp"
 import { createBrowserFiles } from "./files"
 import { createDiagnostics } from "./diagnostics"
 import { loadIcon } from "./icon"
-import { pageLetter, pageShortcut, type PageShortcut } from "./keys"
+import { pageLetter, pageReload, pageShortcut, type PageShortcut } from "./keys"
 import { createProfiling, type Recording } from "./profiling"
 import type { BrowserNetwork } from "./network"
 import {
@@ -178,7 +178,7 @@ export function createBrowserPage(
   contents.on("before-input-event", (event, input) => {
     if (input.type !== "keyDown") return
 
-    if (input.key === "F5" && !input.meta && !input.control && !input.alt && !input.shift) {
+    if (pageReload(input, process.platform === "darwin")) {
       event.preventDefault()
       contents.reload()
 

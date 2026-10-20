@@ -344,6 +344,42 @@ story("opens a browser tab with ⌘T inside the pane and a session everywhere el
   await expect(sessions).toHaveText("1")
 })
 
+story("reloads the browser tab with ⌘R inside the pane and leaves it to the window elsewhere", async ({ page }) => {
+  const root = page.getByTestId("browser-region-fixture")
+  const mac = await page.evaluate(() => /Mac|iPhone|iPad|iPod/.test(navigator.platform))
+  const outside = root.getByRole("button", { name: "Beta", exact: true })
+  const address = root.getByRole("combobox", { name: "Browser address", exact: true })
+  const reloads = root.getByTestId("browser-reloads")
+  await expect(root.getByText("Registrations: 1", { exact: true })).toBeVisible()
+  await outside.click()
+  await expect(root.getByText("Registrations: 2", { exact: true })).toBeVisible()
+  await root.getByRole("button", { name: "First inventory", exact: true }).click()
+  await expect(root.getByRole("tab", { name: "Preview", exact: true })).toHaveAttribute("aria-selected", "true")
+
+  // Returns whether the chord stays unhandled, so it reaches the window's Reload menu item.
+  const press = (target: typeof outside) =>
+    target.evaluate(
+      (element, meta) =>
+        element.dispatchEvent(
+          new KeyboardEvent("keydown", {
+            key: "r",
+            code: "KeyR",
+            metaKey: meta,
+            ctrlKey: !meta,
+            bubbles: true,
+            cancelable: true,
+          }),
+        ),
+      mac,
+    )
+
+  expect(await press(outside)).toBe(true)
+  await expect(reloads).toHaveText("0")
+
+  expect(await press(address)).toBe(false)
+  await expect(reloads).toHaveText("1")
+})
+
 story("reopens a closed browser tab with ⌘⇧T after the side panel and a session tab elsewhere", async ({ page }) => {
   const root = page.getByTestId("browser-region-fixture")
   const mac = await page.evaluate(() => /Mac|iPhone|iPad|iPod/.test(navigator.platform))

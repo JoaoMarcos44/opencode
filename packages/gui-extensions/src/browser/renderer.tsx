@@ -69,6 +69,26 @@ const setup: Setup<typeof definition> = (ctx) => {
     }
   })
 
+  // The system browser's reload shortcut. While the page has focus, the page claims it itself; here it covers focus
+  // elsewhere in the pane. Everywhere else mod+r keeps the window's Reload.
+  ctx.add(Command, (): Command | undefined => {
+    const pane = model()?.pane()
+
+    if (!pane) return undefined
+
+    return {
+      id: "reloadPage",
+      title: ctx.t("command.reload"),
+      group: ctx.t("command.category.view"),
+      bind: "mod+r",
+      scope: "#browser-panel",
+      hidden: true,
+      editable: true,
+      enabled: pane.visible(),
+      run: pane.reload,
+    }
+  })
+
   // The system browser's address shortcut. While the page has focus, the page claims it and main forwards it; here it
   // covers focus elsewhere in the pane. Ctrl+L focuses the composer outside the pane on Windows and Linux.
   ctx.add(Command, (): Command | undefined => {

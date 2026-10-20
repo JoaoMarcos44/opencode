@@ -38,9 +38,21 @@ export function pageLetter(input: Pick<Electron.Input, "key" | "code">) {
 }
 
 /**
+ * Whether a page key press is the system browser's reload: F5, or the platform's modifier with R. The focused page
+ * reloads itself; left to the window, the Reload menu item would reload the whole app.
+ */
+export function pageReload(input: PageKey, mac: boolean) {
+  if (input.alt || input.shift) return false
+
+  if (input.key === "F5") return !input.meta && !input.control
+
+  return (mac ? input.meta && !input.control : input.control && !input.meta) && pageLetter(input) === "r"
+}
+
+/**
  * Returns the shortcut to forward to the app window when a focused page receives a key press that belongs to the
  * browser pane or app shell, or `undefined` when the key belongs to the page (typing, editing, clipboard, find,
- * reload, history, or in-page shortcuts like ⌘K and ⌘B).
+ * history, or in-page shortcuts like ⌘K and ⌘B).
  */
 export function pageShortcut(input: PageKey, mac: boolean): PageShortcut | undefined {
   const key = pageLetter(input)

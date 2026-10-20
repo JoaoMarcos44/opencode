@@ -641,6 +641,8 @@ type RegionFixtureState = {
   sessions: number
   /** How many browser tabs the pane asked main to open. */
   opens: number
+  /** How many page reloads the pane asked main for. */
+  reloads: number
   reopens: number
   switches: number
   /** The page main reports, blank or loaded. */
@@ -678,6 +680,7 @@ export function mountBrowserRegion(input: RegionHost) {
       opened: true,
       sessions: 0,
       opens: 0,
+      reloads: 0,
       reopens: 0,
       switches: 0,
       blank: false,
@@ -848,6 +851,8 @@ export function mountBrowserRegion(input: RegionHost) {
       load: async () => undefined,
       command: async (value) => {
         if (value.command.type === "tabs.open") setStore("opens", (count) => count + 1)
+
+        if (value.command.type === "reload") setStore("reloads", (count) => count + 1)
 
         if (value.command.type !== "tabs.close") return
 
@@ -1099,6 +1104,7 @@ export function mountBrowserRegion(input: RegionHost) {
             <textarea aria-label="Composer" />
             <p data-testid="new-sessions">{store.sessions}</p>
             <p data-testid="browser-opens">{store.opens}</p>
+            <p data-testid="browser-reloads">{store.reloads}</p>
             <p data-testid="session-reopens">{store.reopens}</p>
             <p data-testid="session-switches">{store.switches}</p>
             <p data-testid="add-shortcut">{shortcut()() || "none"}</p>

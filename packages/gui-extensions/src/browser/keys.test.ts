@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test"
-import { pageLetter, pageShortcut, type PageKey } from "./keys"
+import { pageLetter, pageReload, pageShortcut, type PageKey } from "./keys"
 
 /** A key press with `mod` as the platform's modifier: Command on macOS, Control elsewhere. */
 const press = (modifiers: string, key: string, mac: boolean, code = ""): PageKey => {
@@ -120,4 +120,32 @@ test("forwards browser and shell shortcuts while leaving page editing, find, rel
   ])
 
   expect(results).toEqual(cases.map(([modifiers, key, mac, forwarded]) => [modifiers, key, mac, forwarded]))
+})
+
+test("reloads the focused page on F5 and the platform's reload chord, leaving other R chords to the window", () => {
+  const cases: [modifiers: string, key: string, mac: boolean, reloads: boolean, code?: string][] = [
+    ["", "F5", true, true],
+    ["", "F5", false, true],
+    ["mod", "r", true, true],
+    ["mod", "r", false, true],
+    // Dvorak: R is on the physical O key; the character decides.
+    ["mod", "r", true, true, "KeyO"],
+    ["mod", "\u043a", true, true, "KeyR"],
+    // ⇧⌘R toggles review, and macOS Control+R is the page's own.
+    ["mod+shift", "R", true, false],
+    ["mod+shift", "R", false, false],
+    ["mod+alt", "r", true, false],
+    ["ctrl", "r", true, false],
+    ["mod", "F5", true, false],
+    ["", "r", true, false],
+  ]
+
+  const results = cases.map(([modifiers, key, mac, , code]) => [
+    modifiers,
+    key,
+    mac,
+    pageReload(press(modifiers, key, mac, code), mac),
+  ])
+
+  expect(results).toEqual(cases.map(([modifiers, key, mac, reloads]) => [modifiers, key, mac, reloads]))
 })
