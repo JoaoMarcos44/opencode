@@ -85,6 +85,7 @@ test("the combined location picker shows checkout branches and chooses the base 
   listed.resolve(["timeline-quotes", "release/base", "origin/dev"])
   await expect(page.getByRole("option", { name: "release/base", exact: true })).toBeVisible()
   await search.fill("release")
+  await expect(search).toHaveAttribute("aria-busy", "false")
   await expect(page.getByRole("option")).toHaveText(["release/base"])
   await page.getByRole("option", { name: "release/base", exact: true }).click()
   const selected = screen.getByRole("button", { name: "from release/base", exact: true })
