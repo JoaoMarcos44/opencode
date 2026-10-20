@@ -11,7 +11,7 @@ import { Database } from "@opencode/core/database/database"
 import { Project } from "@opencode/core/project"
 import { ProjectIcon } from "@opencode/core/project/icon"
 import { ProjectTable } from "@opencode/core/project/sql"
-import { AbsolutePath } from "@opencode/core/schema"
+import { AbsolutePath, RelativePath } from "@opencode/core/schema"
 import { FSUtil } from "@opencode/util/fs-util"
 import { initGit } from "./fixture/git"
 import { tmpdir } from "./fixture/tmpdir"
@@ -113,6 +113,10 @@ describe("Project icon persistence", () => {
 
       expect(firstUrl).toMatch(new RegExp(`^/api/project/${resolved.id}/icon\\?v=[0-9a-f]{16}$`))
       expect(new TextDecoder().decode((yield* project.icon(resolved.id))?.bytes)).toBe(SVG)
+      expect((yield* project.icons(root)).map((item) => item.path)).toEqual([
+        RelativePath.make("public/favicon.svg"),
+        RelativePath.make("assets/logo.svg"),
+      ])
 
       yield* Effect.promise(() => writeFile(root, "public/favicon.svg", SVG_UPDATED))
       expect(new TextDecoder().decode((yield* project.icon(resolved.id))?.bytes)).toBe(SVG_UPDATED)
