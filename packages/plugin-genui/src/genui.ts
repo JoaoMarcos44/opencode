@@ -1,6 +1,6 @@
 export * as GenUI from "./genui.js"
 
-import { Schema } from "effect"
+import { Option, Schema } from "effect"
 
 export const MAX_CODE = 100_000
 /** The model-facing name of the render tool, and the tool name its calls carry in the timeline. */
@@ -31,3 +31,21 @@ export const unfence = (code: string) =>
     .trim()
     .replace(/^```[\w-]*\n?/u, "")
     .replace(/\n?```$/u, "")
+
+/** The prompt metadata key under which the app records a user's reply to a render call. */
+export const REPLY_METADATA = "genuiReply"
+
+/** A reply to a render call: the call it answers and the form fields it sent, by field name. */
+export const Reply = Schema.Struct({
+  callID: Schema.String,
+  fields: Schema.Record(Schema.String, Schema.Union([Schema.String, Schema.Boolean])),
+})
+export type Reply = typeof Reply.Type
+
+const decodeReply = Schema.decodeUnknownOption(Reply)
+
+/** The reply a render call already received, found among the metadata of the session's user prompts. */
+export const replyTo = (callID: string, prompts: readonly (Readonly<Record<string, unknown>> | undefined)[]) =>
+  prompts
+    .flatMap((metadata) => Option.toArray(decodeReply(metadata?.[REPLY_METADATA])))
+    .find((reply) => reply.callID === callID)

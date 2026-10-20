@@ -123,7 +123,12 @@ export function SessionUIProvider(
         onNavigateToSession={navigateToSession}
         onSessionHref={href}
         onPrompt={(input) =>
-          data.session.prompt({ ...input, metadata: { genui: settings.general.generatedUI() } }).then(() => undefined)
+          data.session
+            .prompt({ ...input, metadata: { ...input.metadata, genui: settings.general.generatedUI() } })
+            .then(() => undefined)
+        }
+        promptMetadata={(sessionID) =>
+          data.session.message.list(sessionID).flatMap((message) => (message.type === "user" ? [message.metadata] : []))
         }
       >
         <MarkdownProvider readImage={readImage()} openSession={openReferencedSession} sessionTitle={sessionTitle}>

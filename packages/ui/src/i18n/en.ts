@@ -201,6 +201,8 @@ const source = {
   "ui.genui.title": "Generated UI",
   "ui.genui.writing": "Writing",
   "ui.genui.submitted": "Submitted in {{title}}:",
+  "ui.genui.sent": "Submitted",
+  "ui.genui.failed": "Couldn't send. Try again.",
   "ui.genui.total": "Total",
   "ui.genui.actual": "Actual",
   "ui.genui.projected": "Projected",

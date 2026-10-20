@@ -356,7 +356,25 @@ button[data-slot="genui-row"]:disabled {
 [data-component="genui-actions"] {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 8px;
+}
+
+[data-slot="genui-actions-status"],
+[data-slot="genui-actions-error"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  line-height: var(--line-height-compact);
+}
+
+[data-slot="genui-actions-status"] {
+  color: var(--v2-text-text-muted);
+}
+
+[data-slot="genui-actions-error"] {
+  color: var(--v2-state-fg-danger);
 }
 
 [data-component="genui-form"] {

@@ -5,6 +5,7 @@ import { GenUI } from "@opencode/plugin-genui/genui"
 import { GenUILang } from "@opencode/plugin-genui/lang"
 import { Button, type ButtonProps } from "@opencode/ui/button"
 import { Divider } from "@opencode/ui/divider"
+import { useI18n } from "@opencode/ui/context/i18n"
 import { Icon } from "@opencode/ui/icon"
 import type { IconName } from "@opencode/ui/icons/catalog"
 import { RadioGroup, RadioItem } from "@opencode/ui/radio"
@@ -38,7 +39,11 @@ export type GenUIReply = {
   readonly message: string
   /** Submitted form fields, by label, in form order. */
   readonly values?: readonly (readonly [label: string, value: string])[]
+  /** Every field of the submitted form, by name, so a sent form can show what it sent. */
+  readonly fields?: Readonly<Record<string, Value>>
 }
+
+type FormReply = Pick<GenUIReply, "values" | "fields">
 
 type Node = GenUICatalog.Surface["props"]["children"][number]
 
@@ -55,15 +60,18 @@ type Value = string | boolean
 
 const Surface = createContext<{
   readonly busy: () => boolean
+  /** The form fields the surface's reply sent, once it has replied. */
+  readonly sent: () => Readonly<Record<string, Value>> | undefined
+  readonly failed: () => boolean
   /** Replies with text (or `label` when there is none), or runs the actions against the surface's state. */
-  readonly act: (behaviour: Behaviour, label: string, values?: GenUIReply["values"]) => void
+  readonly act: (behaviour: Behaviour, label: string, form?: FormReply) => void
   readonly open: (url: string) => void
 }>()
 
 const Form = createContext<{
   readonly value: (name: string) => Value | undefined
   readonly set: (name: string, value: Value) => void
-  readonly values: () => GenUIReply["values"]
+  readonly reply: () => FormReply
 }>()
 
 // The primary action is the contrast button, as in the app's own dialogs.
@@ -102,6 +110,10 @@ export function GenUISurface(props: {
   streaming?: boolean
   /** Turns off buttons, rows and form submission, e.g. while a reply is sending. */
   busy?: boolean
+  /** The form fields the surface already replied with. A sent surface shows them and takes no more input. */
+  sent?: Readonly<Record<string, Value>>
+  /** The last reply failed to send. */
+  failed?: boolean
   onReply: (reply: GenUIReply) => void
   onOpen: (url: string) => void
   /** Shown when the program has no valid root yet. */
@@ -133,7 +145,7 @@ export function GenUISurface(props: {
     setStore("root", reconcile(rendered.root ?? undefined, { key: "statementId", merge: true }))
   })
 
-  const apply = (outcome: GenUILang.Outcome | undefined, values: GenUIReply["values"]) => {
+  const apply = (outcome: GenUILang.Outcome | undefined, form: FormReply | undefined) => {
     if (outcome?.type === "set")
       setStore("changes", (changes) => [
         ...changes.filter((change) => change.name !== outcome.name),
@@ -143,25 +155,33 @@ export function GenUISurface(props: {
     if (outcome?.type === "reset")
       setStore("changes", (changes) => changes.filter((change) => !outcome.names.includes(change.name)))
 
-    if (outcome?.type === "reply") props.onReply({ message: outcome.message, values })
+    if (outcome?.type === "reply") props.onReply({ message: outcome.message, ...form })
 
     if (outcome?.type === "open") props.onOpen(outcome.url)
   }
 
   // Each action sees the state the previous one left.
-  const run = (actions: readonly GenUILang.Action[], values: GenUIReply["values"]) =>
-    actions.forEach((action) => apply(GenUILang.perform(action, program(), GenUICatalog.catalog, state()), values))
+  const run = (actions: readonly GenUILang.Action[], form: FormReply | undefined) =>
+    actions.forEach((action) => apply(GenUILang.perform(action, program(), GenUICatalog.catalog, state()), form))
 
-  const act = (behaviour: Behaviour, label: string, values?: GenUIReply["values"]) => {
-    if (behaviour instanceof GenUILang.Action) return run([behaviour], values)
+  const act = (behaviour: Behaviour, label: string, form?: FormReply) => {
+    if (behaviour instanceof GenUILang.Action) return run([behaviour], form)
 
-    if (isActionList(behaviour)) return run(behaviour, values)
+    if (isActionList(behaviour)) return run(behaviour, form)
 
-    props.onReply({ message: behaviour ?? label, values })
+    props.onReply({ message: behaviour ?? label, ...form })
   }
 
   return (
-    <Surface.Provider value={{ busy: () => props.busy === true, act, open: props.onOpen }}>
+    <Surface.Provider
+      value={{
+        busy: () => props.busy === true,
+        sent: () => props.sent,
+        failed: () => props.failed === true,
+        act,
+        open: props.onOpen,
+      }}
+    >
       <Show when={store.root} fallback={props.fallback}>
         {(root) => (
           <div data-component="genui-surface">
@@ -526,6 +546,7 @@ function GroupRow(props: { row: typeof GenUICatalog.Row.Type }) {
 }
 
 function Actions(props: { node: typeof GenUICatalog.Actions.Type }) {
+  const i18n = useI18n()
   const surface = useContext(Surface)
   const form = useContext(Form)
 
@@ -555,7 +576,7 @@ function Actions(props: { node: typeof GenUICatalog.Actions.Type }) {
                 size="normal"
                 variant={buttonVariants[button().variant ?? "secondary"]}
                 disabled={surface?.busy()}
-                onClick={() => surface?.act(button().action, button().label, form?.values())}
+                onClick={() => surface?.act(button().action, button().label, form?.reply())}
               >
                 {button().label}
               </Button>
@@ -563,11 +584,21 @@ function Actions(props: { node: typeof GenUICatalog.Actions.Type }) {
           </Show>
         )}
       </For>
+      <Show when={surface?.sent()}>
+        <span data-slot="genui-actions-status">
+          <Icon name="check" size="small" />
+          {i18n.t("ui.genui.sent")}
+        </span>
+      </Show>
+      <Show when={surface?.failed()}>
+        <span data-slot="genui-actions-error">{i18n.t("ui.genui.failed")}</span>
+      </Show>
     </div>
   )
 }
 
 function FormBlock(props: { node: typeof GenUICatalog.Form.Type }) {
+  const surface = useContext(Surface)
   const fields = () => props.node.props.fields
 
   // Only what the user changed; a field's default comes from its current node, so fields that stream in later
@@ -575,6 +606,7 @@ function FormBlock(props: { node: typeof GenUICatalog.Form.Type }) {
   const [state, setState] = createStore<{ values: { name: string; value: Value }[] }>({ values: [] })
 
   const value = (name: string) =>
+    surface?.sent()?.[name] ??
     state.values.find((entry) => entry.name === name)?.value ??
     initial(fields().find((field) => field.props.name === name))
 
@@ -586,12 +618,20 @@ function FormBlock(props: { node: typeof GenUICatalog.Form.Type }) {
       value={{
         value,
         set,
-        values: () =>
-          fields().flatMap((field) => {
+        reply: () => ({
+          values: fields().flatMap((field) => {
             const current = value(field.props.name)
 
             return current === undefined || current === "" ? [] : [[field.props.label, String(current)] as const]
           }),
+          fields: Object.fromEntries(
+            fields().flatMap((field) => {
+              const current = value(field.props.name)
+
+              return current === undefined ? [] : [[field.props.name, current] as const]
+            }),
+          ),
+        }),
       }}
     >
       <form data-component="genui-form" onSubmit={(event) => event.preventDefault()}>
@@ -611,8 +651,10 @@ function initial(field: GenUICatalog.Field | undefined): Value | undefined {
 }
 
 function Field(props: { field: GenUICatalog.Field }): JSX.Element {
+  const surface = useContext(Surface)
   const form = useContext(Form)
   const field = props.field
+  const sent = () => surface?.sent() !== undefined
 
   const text = () => {
     const current = form?.value(field.props.name)
@@ -633,6 +675,7 @@ function Field(props: { field: GenUICatalog.Field }): JSX.Element {
             class="!w-full"
             placeholder={field.props.placeholder ?? undefined}
             value={text()}
+            disabled={sent()}
             onInput={(event) => form?.set(field.props.name, event.currentTarget.value)}
           />
           {hint(field.props.hint)}
@@ -646,6 +689,7 @@ function Field(props: { field: GenUICatalog.Field }): JSX.Element {
             class="!w-full"
             placeholder={field.props.placeholder ?? undefined}
             value={text()}
+            disabled={sent()}
             onInput={(event) => form?.set(field.props.name, event.currentTarget.value)}
           />
           {hint(field.props.hint)}
@@ -659,6 +703,7 @@ function Field(props: { field: GenUICatalog.Field }): JSX.Element {
             class="!w-full"
             options={[...field.props.options]}
             current={text() || undefined}
+            disabled={sent()}
             onSelect={(option) => form?.set(field.props.name, option ?? "")}
           />
           {hint(field.props.hint)}
@@ -673,6 +718,7 @@ function Field(props: { field: GenUICatalog.Field }): JSX.Element {
             label={field.props.label}
             hideLabel
             value={text()}
+            disabled={sent()}
             onChange={(option) => form?.set(field.props.name, option)}
           >
             <For each={field.props.options}>{(option) => <RadioItem value={option} label={option} />}</For>
@@ -687,6 +733,7 @@ function Field(props: { field: GenUICatalog.Field }): JSX.Element {
           <SegmentedControl
             class="segmented-control-v2--full-width"
             value={text() || null}
+            disabled={sent()}
             onChange={(option) => form?.set(field.props.name, option ?? "")}
           >
             <For each={field.props.options}>
@@ -699,6 +746,7 @@ function Field(props: { field: GenUICatalog.Field }): JSX.Element {
       return (
         <Switch
           checked={form?.value(field.props.name) === true}
+          disabled={sent()}
           description={field.props.hint ?? undefined}
           onChange={(checked) => form?.set(field.props.name, checked)}
         >

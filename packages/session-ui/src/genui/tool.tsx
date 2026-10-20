@@ -1,5 +1,4 @@
 import { createMemo, Show } from "solid-js"
-import { createStore } from "solid-js/store"
 import { Option, Schema } from "effect"
 import { GenUI } from "@opencode/plugin-genui/genui"
 import { useI18n } from "@opencode/ui/context/i18n"
@@ -7,27 +6,45 @@ import { Icon } from "@opencode/ui/icon"
 import { TextShimmer } from "@opencode/ui/text-shimmer"
 import { useData } from "../context/data"
 import { ToolRegistry, type ToolProps } from "../tools/tool-renderer"
+import { createReplySender } from "./reply"
 import { genuiReplyText, GenUISurface, type GenUIReply } from "./surface"
 
 const decodeInput = Schema.decodeUnknownOption(GenUI.RenderInput)
 
 /** A `genui_render` call in the timeline: the surface itself, drawn while its program streams in. */
-function GenUITool(props: ToolProps) {
+// ToolDisplay passes the tool call ID along with the props every tool gets.
+function GenUITool(props: ToolProps & { id?: string }) {
   const i18n = useI18n()
   const data = useData()
   const input = createMemo(() => Option.getOrElse(decodeInput(props.input), (): GenUI.RenderInput => ({})))
   const writing = () => props.status === "streaming" || props.status === "running" || props.status === "pending"
-  const [state, setState] = createStore({ sending: false })
 
-  const reply = (value: GenUIReply) => {
-    const prompt = data.prompt
+  // Durable: the reply is a prompt in the session, so the surface stays sent after a reload or remount.
+  const sent = createMemo(() => {
     const sessionID = data.sessionID
 
-    if (!prompt || !sessionID || state.sending) return
-    setState("sending", true)
-    const heading = i18n.t("ui.genui.submitted", { title: input().title ?? i18n.t("ui.genui.title") })
-    void prompt({ sessionID, text: genuiReplyText(value, heading) }).finally(() => setState("sending", false))
-  }
+    if (!sessionID || !props.id) return undefined
+
+    return GenUI.replyTo(props.id, data.promptMetadata?.(sessionID) ?? [])
+  })
+
+  const sender = createReplySender({
+    sent: () => sent() !== undefined,
+    send: (value: GenUIReply) => {
+      const prompt = data.prompt
+      const sessionID = data.sessionID
+
+      if (!prompt || !sessionID || !props.id) return Promise.resolve()
+
+      const heading = i18n.t("ui.genui.submitted", { title: input().title ?? i18n.t("ui.genui.title") })
+
+      return prompt({
+        sessionID,
+        text: genuiReplyText(value, heading),
+        metadata: { [GenUI.REPLY_METADATA]: { callID: props.id, fields: { ...value.fields } } },
+      })
+    },
+  })
 
   return (
     <div data-component="genui-inline" data-writing={writing() || undefined}>
@@ -48,8 +65,10 @@ function GenUITool(props: ToolProps) {
             <GenUISurface
               code={code()}
               streaming={writing()}
-              busy={!data.prompt || state.sending}
-              onReply={reply}
+              busy={!data.prompt || !props.id || sender.sending() || sent() !== undefined}
+              sent={sent()?.fields}
+              failed={sender.failed()}
+              onReply={sender.send}
               onOpen={(url) => {
                 if (/^https?:\/\//iu.test(url)) window.open(url, "_blank", "noopener,noreferrer")
               }}
