@@ -103,7 +103,6 @@ export const dict = {
   "command.context.addSelection": "Pridėkite pasirinkimą prie konteksto",
   "command.context.addSelection.description": "Pridėkite pasirinktas eilutes iš dabartinio failo",
   "command.input.focus": "Fokusuoti įvesties lauką",
-  "command.fileTree.toggle": "Perjungti failų medį",
   "command.review.toggle": "Perjungti peržiūrą",
   "command.message.previous": "Ankstesnė žinutė",
   "command.message.previous.description": "Eikite į ankstesnį vartotojo pranešimą",

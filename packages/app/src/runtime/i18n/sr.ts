@@ -104,7 +104,6 @@ export const dict = {
   "command.context.addSelection": "Додајте избор у контекст",
   "command.context.addSelection.description": "Додајте изабране линије из тренутне датотеке",
   "command.input.focus": "Фокусни унос",
-  "command.fileTree.toggle": "Пребаците стабло датотека",
   "command.review.toggle": "Пребаци преглед",
   "command.message.previous": "Претходна порука",
   "command.message.previous.description": "Идите на претходну корисничку поруку",

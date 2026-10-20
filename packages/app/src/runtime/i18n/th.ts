@@ -99,7 +99,6 @@ export const dict = {
   "command.context.addSelection": "เพิ่มส่วนที่เลือกไปยังบริบท",
   "command.context.addSelection.description": "เพิ่มบรรทัดที่เลือกจากไฟล์ปัจจุบัน",
   "command.input.focus": "โฟกัสช่องป้อนข้อมูล",
-  "command.fileTree.toggle": "สลับแผนผังไฟล์",
   "command.review.toggle": "สลับการตรวจสอบ",
   "command.message.previous": "ข้อความก่อนหน้า",
   "command.message.previous.description": "ไปที่ข้อความผู้ใช้ก่อนหน้า",

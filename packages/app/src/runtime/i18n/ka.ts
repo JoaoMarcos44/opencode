@@ -90,7 +90,6 @@ export const dict = {
   "command.context.addSelection": "მონიშვნის დამატება კონტექსტში",
   "command.context.addSelection.description": "მორჩეული ხაზების დამატება მიმდინარე ფაილიდან",
   "command.input.focus": "ფოკუსის შეყვანა",
-  "command.fileTree.toggle": "ფაილის ხის გადართვა",
   "command.review.toggle": "მიმოხილვის გადართვა",
   "command.message.previous": "წინა შეტყობინება",
   "command.message.previous.description": "გადადით მომხმარებლის წინა შეტყობინებაზე",

@@ -96,7 +96,6 @@ export const dict = {
   "command.context.addSelection": "سیاق و سباق وچ انتخاب شامل کرو",
   "command.context.addSelection.description": "موجودہ فائل چوں منتخب کردہ لائناں شامل کرو",
   "command.input.focus": "ان پٹ تے فوکس کرو",
-  "command.fileTree.toggle": "فائل ٹری نوں ٹوگل کرو",
   "command.review.toggle": "جائزہ ٹوگل کرو",
   "command.message.previous": "پچھلا سنیہا",
   "command.message.previous.description": "پچھلے صارف دے سنیہے تے جاؤ",

@@ -90,7 +90,6 @@ export const dict = {
   "command.context.addSelection": "Lisage valik konteksti",
   "command.context.addSelection.description": "Lisa valitud read aktiivsest failist",
   "command.input.focus": "Fookuse sisend",
-  "command.fileTree.toggle": "Failipuu sisse- ja väljalülitamine",
   "command.review.toggle": "Lülita ülevaatus sisse",
   "command.message.previous": "Eelmine sõnum",
   "command.message.previous.description": "Minge eelmise kasutaja sõnumi juurde",

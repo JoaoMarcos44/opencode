@@ -125,7 +125,6 @@ export const dict = {
   "command.context.addSelection": "Додати виділення до контексту",
   "command.context.addSelection.description": "Додати вибрані рядки з поточного файлу",
   "command.input.focus": "Фокус на полі введення",
-  "command.fileTree.toggle": "Перемкнути дерево файлів",
   "command.review.toggle": "Перемкнути огляд",
   "command.message.previous": "Попереднє повідомлення",
   "command.message.previous.description": "Перейти до попереднього повідомлення користувача",

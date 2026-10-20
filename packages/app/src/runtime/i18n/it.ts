@@ -243,7 +243,6 @@ export const dict = {
   "command.context.addSelection": "Aggiungi la selezione al contesto",
   "command.context.addSelection.description": "Aggiungi le righe selezionate dal file corrente",
   "command.input.focus": "Attiva il campo di inserimento",
-  "command.fileTree.toggle": "Mostra o nascondi l'albero dei file",
   "command.review.toggle": "Mostra o nascondi la revisione",
   "command.message.previous": "Messaggio precedente",
   "command.message.previous.description": "Vai al messaggio utente precedente",

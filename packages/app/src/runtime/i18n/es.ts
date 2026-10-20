@@ -313,7 +313,6 @@ export const dict = {
   "command.context.addSelection": "Añadir selección al contexto",
   "command.context.addSelection.description": "Añadir las líneas seleccionadas del archivo actual",
   "command.input.focus": "Enfocar entrada",
-  "command.fileTree.toggle": "Mostrar u ocultar árbol de archivos",
   "command.review.toggle": "Mostrar u ocultar revisión",
   "command.message.previous": "Mensaje anterior",
   "command.message.previous.description": "Ir al mensaje de usuario anterior",

@@ -538,46 +538,6 @@ test("file tree expands Windows paths and scrolls long names in both directions"
   await expect(panel.getByText("contents:frontend/app.ts", { exact: true })).toBeVisible()
 })
 
-test("a restored file tab keeps the file tree on Files Changed", async ({ page }) => {
-  const directory = "C:/OpenCode/TreeRestore"
-  await openSession(page, {
-    name: "TreeRestore",
-    vcsDiff: [fileDiff("src/changed.ts")],
-    fileList: (path) => (path ? [] : [fileNode(directory, "README.md")]),
-    fileContent: (path) => ({ type: "text", content: `contents:${path}` }),
-    seed: {
-      panes: { ses_treerestore: { review: true } },
-      settings: { general: { showFileTree: true } },
-      storage: {
-        "opencode.global.dat:layout": {
-          ...reviewTabs(directory, "ses_treerestore")["opencode.global.dat:layout"],
-          fileTree: { opened: true, width: 240, tab: "changes" },
-        },
-      },
-    },
-  })
-  const panel = page.locator("#review-panel")
-  const tree = page.locator("#file-tree-panel")
-  const treeTab = (name: string) => tree.getByRole("tab", { name, exact: true })
-  const readme = panel.getByRole("tab", { name: "README.md", exact: true })
-
-  await treeTab("All files").click()
-  await tree.getByRole("button", { name: "README.md" }).click()
-  await expect(readme).toHaveAttribute("aria-selected", "true")
-  await treeTab("Files Changed 1").click()
-  await expect(treeTab("Files Changed 1")).toHaveAttribute("aria-selected", "true")
-
-  await page.reload()
-  await expect(readme).toHaveAttribute("aria-selected", "true")
-  await expect(panel.getByText("contents:README.md", { exact: true })).toBeVisible()
-  await expect(treeTab("Files Changed 1")).toHaveAttribute("aria-selected", "true")
-
-  // Selecting a file tab after load still shows it among all files.
-  await panel.locator("#session-side-panel-review-tab").click()
-  await readme.click()
-  await expect(treeTab("All files")).toHaveAttribute("aria-selected", "true")
-})
-
 test("rereads a file each time an artifact link opens it", async ({ page }) => {
   // Enough lines to scroll the code view, ending in the draft's name.
   const draft = (name: string) => [...Array.from({ length: 200 }, (_, index) => `item ${index + 1}`), name].join("\n")

@@ -110,7 +110,6 @@ export const dict = {
   "command.context.addSelection": "Seçimi bağlama ekle",
   "command.context.addSelection.description": "Mevcut dosyadan seçili satırları ekle",
   "command.input.focus": "Girişi odakla",
-  "command.fileTree.toggle": "Dosya ağacını aç/kapat",
   "command.review.toggle": "İncelemeyi aç/kapat",
   "command.message.previous": "Önceki mesaj",
   "command.message.previous.description": "Önceki kullanıcı mesajına git",

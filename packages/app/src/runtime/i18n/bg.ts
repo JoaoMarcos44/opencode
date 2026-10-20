@@ -91,7 +91,6 @@ export const dict = {
   "command.context.addSelection": "Добавете селекция към контекста",
   "command.context.addSelection.description": "Добавяне на избрани редове от текущия файл",
   "command.input.focus": "Въвеждане на фокус",
-  "command.fileTree.toggle": "Превключване на файловото дърво",
   "command.review.toggle": "Превключване на прегледа",
   "command.message.previous": "Предишно съобщение",
   "command.message.previous.description": "Отидете на предишното потребителско съобщение",

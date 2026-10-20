@@ -104,9 +104,9 @@ const placementOnlySchema = Persistence.struct({ placement: placementSchema })
 const generalSchema = Persistence.struct({
   // Retired preferences without readers; kept so stored values still decode and round-trip.
   autoSave: Persistence.optional(Schema.Boolean),
+  showFileTree: Persistence.optional(Schema.Boolean),
   // Owned by the updater extension, which copies it out once; kept so settings rewrites cannot drop it first.
   releaseNotes: Persistence.optional(Schema.Boolean),
-  showFileTree: Schema.Boolean,
   showNavigation: Persistence.optional(Schema.Boolean),
   showSearch: Persistence.optional(Schema.Boolean),
   showTerminal: Persistence.optional(Schema.Boolean),
@@ -287,7 +287,6 @@ export const settingsPersistence = Persistence.migrate(
 
 export const defaultSettings: Settings = {
   general: {
-    showFileTree: false,
     timelineDetail: { ...timelinePresets[2].value },
     showCustomAgents: false,
     showTurnDiffs: false,
@@ -322,7 +321,6 @@ export const { use: useSettings, provider: SettingsProvider } = createSimpleCont
   gate: false,
   init: () => {
     const [store, setStore, , ready] = persisted({ key: "settings.v3" }, settingsPersistence, defaultSettings)
-    const showFileTree = withFallback(() => store.general?.showFileTree, defaultSettings.general.showFileTree)
 
     const showCustomAgents = withFallback(
       () => store.general?.showCustomAgents,
@@ -365,10 +363,6 @@ export const { use: useSettings, provider: SettingsProvider } = createSimpleCont
         return store
       },
       general: {
-        showFileTree,
-        setShowFileTree(value: boolean) {
-          setStore("general", "showFileTree", value)
-        },
         timelineDetail: withFallback(() => store.general?.timelineDetail, defaultSettings.general.timelineDetail),
         setTimelineDetail(value: TimelineDetail) {
           setStore("general", "timelineDetail", structuredClone(unwrap(value)))
@@ -412,7 +406,6 @@ export const { use: useSettings, provider: SettingsProvider } = createSimpleCont
         },
       },
       visibility: {
-        fileTree: showFileTree,
         customAgents: showCustomAgents,
       },
       appearance: {

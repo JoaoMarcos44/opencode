@@ -94,7 +94,6 @@ export const dict = {
   "command.context.addSelection": "إضافة التحديد إلى السياق",
   "command.context.addSelection.description": "إضافة الأسطر المحددة من الملف الحالي",
   "command.input.focus": "التركيز على حقل الإدخال",
-  "command.fileTree.toggle": "تبديل شجرة الملفات",
   "command.review.toggle": "تبديل المراجعة",
   "command.message.previous": "الرسالة السابقة",
   "command.message.previous.description": "انتقل إلى رسالة المستخدم السابقة",

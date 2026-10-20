@@ -244,8 +244,6 @@ const setup: Setup<typeof Review> = (ctx) => {
     }
   })
 
-  const reveals = new Set<() => void>()
-
   // A review comment in the composer reveals its diff.
   ctx.add(LinkHandler, {
     priority: 1,
@@ -259,7 +257,6 @@ const setup: Setup<typeof Review> = (ctx) => {
         // Narrow screens keep their view, as they did before extensions.
         if (!layout.narrow() && session.project) layout.open(KEY, session)
 
-        reveals.forEach((listener) => listener())
         modelFor(session)?.focusFile(link.href)
       })
     },
@@ -304,13 +301,6 @@ const setup: Setup<typeof Review> = (ctx) => {
       layout.open(KEY, session)
     },
     watch,
-    onReveal(listener) {
-      reveals.add(listener)
-
-      return () => {
-        reveals.delete(listener)
-      }
-    },
   })
 }
 

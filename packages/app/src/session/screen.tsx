@@ -14,14 +14,13 @@ import {
 } from "solid-js"
 import { createStore } from "solid-js/store"
 import { ResizeHandle } from "@opencode/ui/resize-handle"
-import { Slot, type BackgroundTask, type MountedSession, type SessionScreen } from "@opencode/gui-extensions/sdk"
+import type { BackgroundTask, MountedSession, SessionScreen } from "@opencode/gui-extensions/sdk"
 import { MessageTimeline } from "@/session/timeline/message-timeline"
 import { ComposerDropzone } from "@/composer/dropzone"
 import { useSettings } from "@/settings/model"
 import type { SessionModel } from "@/session/model"
 import { SESSION_PANEL_WIDTH_MIN } from "@/session/session-panel-width"
 import { SessionPanelFrame } from "@/session/session-frame"
-import { useExtensionHost } from "@/runtime/extension/host"
 import { ExtensionLinks } from "@/runtime/extension/render"
 import { createPanelSidebar, createRegion, MobilePanel } from "@/runtime/extension/panels"
 import { createMobileViews, MobileViewTabs } from "@/runtime/extension/mobile"
@@ -70,7 +69,6 @@ function SessionScreenContent(props: {
   bindBackground: (tasks: () => readonly BackgroundTask[]) => void
 }) {
   const session = props.session
-  const host = useExtensionHost()
   const language = useLanguage()
   const attachment = useExtensionAttachment()
   const settings = useSettings()
@@ -108,10 +106,7 @@ function SessionScreenContent(props: {
       }),
   })
 
-  const screen = createSessionScreenLayout(session, {
-    wide: region.wide,
-    sidebar: () => host.items(Slot).some((item) => item.value.at === "session.panel.sidebar"),
-  })
+  const screen = createSessionScreenLayout(session, { wide: region.wide })
 
   const timeline = createSessionTimelineInteraction(session)
 
@@ -452,7 +447,6 @@ function SessionScreenContent(props: {
                         view={props.view()}
                         region={region}
                         sidebar={sidebar}
-                        fileTree={screen.files.open()}
                         present={store.sideTabsPresent}
                         size={screen.size}
                         drag={drag}

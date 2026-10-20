@@ -91,7 +91,6 @@ export const dict = {
   "command.context.addSelection": "Контекст сонголт нэмэх",
   "command.context.addSelection.description": "Одоогийн файлаас сонгосон мөрүүдийг нэмнэ үү",
   "command.input.focus": "Фокус оруулах",
-  "command.fileTree.toggle": "Файлын модыг сэлгэх",
   "command.review.toggle": "Шүүмжийг асаах/унтраах",
   "command.message.previous": "Өмнөх зурвас",
   "command.message.previous.description": "Өмнөх хэрэглэгчийн мессеж рүү очно уу",

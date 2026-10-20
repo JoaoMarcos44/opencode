@@ -91,7 +91,6 @@ export const dict = {
   "command.context.addSelection": "ເພີ່ມການເລືອກໃສ່ບໍລິບົດ",
   "command.context.addSelection.description": "ເພີ່ມສາຍທີ່ເລືອກຈາກໄຟລ໌ປັດຈຸບັນ",
   "command.input.focus": "ໂຟກັສໃສ່",
-  "command.fileTree.toggle": "ສະຫຼັບຕົ້ນໄມ້ໄຟລ໌",
   "command.review.toggle": "ສະຫຼັບການທົບທວນຄືນ",
   "command.message.previous": "ຂໍ້ຄວາມກ່ອນໜ້າ",
   "command.message.previous.description": "ໄປຫາຂໍ້ຄວາມຜູ້ໃຊ້ທີ່ຜ່ານມາ",

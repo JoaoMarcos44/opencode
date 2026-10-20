@@ -239,7 +239,6 @@ export const dict = {
   "command.context.addSelection": "Auswahl zum Kontext hinzufügen",
   "command.context.addSelection.description": "Ausgewählte Zeilen aus der aktuellen Datei hinzufügen",
   "command.input.focus": "Eingabefeld fokussieren",
-  "command.fileTree.toggle": "Dateibaum umschalten",
   "command.review.toggle": "Überprüfung umschalten",
   "command.message.previous": "Vorherige Nachricht",
   "command.message.previous.description": "Zur vorherigen Benutzernachricht gehen",

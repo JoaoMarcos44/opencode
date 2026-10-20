@@ -116,7 +116,6 @@ export const dict = {
   "command.context.addSelection": "Dodaj izbor v kontekst",
   "command.context.addSelection.description": "Dodaj izbrane vrstice iz trenutne datoteke",
   "command.input.focus": "Vnos fokusa",
-  "command.fileTree.toggle": "Preklop drevesa datotek",
   "command.review.toggle": "Preklopi pregled",
   "command.message.previous": "Prejšnje sporočilo",
   "command.message.previous.description": "Pojdite na prejšnje uporabniško sporočilo",

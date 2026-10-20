@@ -103,7 +103,6 @@ export const dict = {
   "command.context.addSelection": "將選取內容加入上下文",
   "command.context.addSelection.description": "加入目前檔案中選取的行",
   "command.input.focus": "聚焦輸入框",
-  "command.fileTree.toggle": "切換檔案樹",
   "command.review.toggle": "切換檢閱",
   "command.message.previous": "上一則訊息",
   "command.message.previous.description": "跳到上一則使用者訊息",

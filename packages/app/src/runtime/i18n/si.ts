@@ -94,7 +94,6 @@ export const dict = {
   "command.context.addSelection": "සන්දර්භයට තේරීම එක් කරන්න",
   "command.context.addSelection.description": "වත්මන් ගොනුවෙන් තෝරාගත් රේඛා එක් කරන්න",
   "command.input.focus": "අවධානය යොමු කරන්න",
-  "command.fileTree.toggle": "ගොනු ගස ටොගල් කරන්න",
   "command.review.toggle": "සමාලෝචනය ටොගල් කරන්න",
   "command.message.previous": "පෙර පණිවිඩය",
   "command.message.previous.description": "පෙර පරිශීලක පණිවිඩයට යන්න",

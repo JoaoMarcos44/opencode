@@ -93,7 +93,6 @@ export const dict = {
   "command.context.addSelection": "ކޮންޓެކްސްޓަށް ސެލެކްޝަން އިތުރުކުރުން",
   "command.context.addSelection.description": "މިހާރު ހުރި ފައިލް އިން ހޮވާފައިވާ ލައިންތައް އިތުރުކުރުން",
   "command.input.focus": "ފޯކަސް އިންޕުޓް",
-  "command.fileTree.toggle": "ޓޮގްލް ފައިލް ޓްރީ",
   "command.review.toggle": "ރިވިއު ޓޮގްލް ކުރާށެވެ",
   "command.message.previous": "ކުރީގެ މެސެޖެވެ",
   "command.message.previous.description": "ކުރީގެ ޔޫޒަރ މެސެޖަށް ދާށެވެ",

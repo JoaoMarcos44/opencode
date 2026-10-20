@@ -91,7 +91,6 @@ export const dict = {
   "command.context.addSelection": "Kontekstga tanlov qo'shing",
   "command.context.addSelection.description": "Joriy fayldan tanlangan qatorlarni qo'shing",
   "command.input.focus": "Fokus kiritish",
-  "command.fileTree.toggle": "Fayl daraxtini almashtirish",
   "command.review.toggle": "Koʻrib chiqish",
   "command.message.previous": "Oldingi xabar",
   "command.message.previous.description": "Oldingi foydalanuvchi xabariga o'ting",

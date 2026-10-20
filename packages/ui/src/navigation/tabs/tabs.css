@@ -420,39 +420,6 @@
       }
     }
   }
-
-  &[data-variant="pill"][data-orientation="horizontal"][data-scope="filetree"] {
-    [data-slot="tabs-list"] {
-      height: 48px;
-      padding-inline: 12px;
-      gap: 8px;
-      align-items: center;
-      background-color: var(--background-stronger);
-      box-sizing: border-box;
-      border-bottom: 1px solid var(--border-weak-base);
-    }
-
-    [data-slot="tabs-trigger-wrapper"] {
-      height: var(--tabs-compact-pill-height);
-      border-radius: var(--tabs-compact-pill-radius);
-      color: var(--text-weak);
-      box-sizing: border-box;
-      border: 1px solid transparent;
-      transition:
-        color 120ms ease,
-        background-color 120ms ease,
-        border-color 120ms ease;
-
-      &:not(:has([data-selected])):hover:not(:disabled) {
-        color: var(--text-base);
-      }
-
-      &:has([data-selected]) {
-        color: var(--text-strong);
-        border-color: var(--border-weak-base);
-      }
-    }
-  }
 }
 
 [data-component="tabs-drag-preview"] {

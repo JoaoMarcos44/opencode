@@ -90,7 +90,6 @@ export const dict = {
   "command.context.addSelection": "Pievienot atlasi kontekstam",
   "command.context.addSelection.description": "Pievienot atlasītās rindas no pašreizējā faila",
   "command.input.focus": "Aktivizēt ievadi",
-  "command.fileTree.toggle": "Rādīt/paslēpt failu koku",
   "command.review.toggle": "Rādīt/paslēpt pārskatu",
   "command.message.previous": "Iepriekšējais ziņojums",
   "command.message.previous.description": "Pāriet uz iepriekšējo lietotāja ziņojumu",

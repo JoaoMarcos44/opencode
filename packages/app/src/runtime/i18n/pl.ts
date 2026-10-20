@@ -94,7 +94,6 @@ export const dict = {
   "command.context.addSelection": "Dodaj zaznaczenie do kontekstu",
   "command.context.addSelection.description": "Dodaj zaznaczone linie z bieżącego pliku",
   "command.input.focus": "Przejdź do pola wprowadzania",
-  "command.fileTree.toggle": "Przełącz drzewo plików",
   "command.review.toggle": "Przełącz przegląd",
   "command.message.previous": "Poprzednia wiadomość",
   "command.message.previous.description": "Przejdź do poprzedniej wiadomości użytkownika",

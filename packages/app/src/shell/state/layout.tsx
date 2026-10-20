@@ -437,46 +437,6 @@ export const { use: useLayout, provider: LayoutProvider } = createSimpleContext(
           })
         },
       },
-      fileTree: {
-        opened: createMemo(() => store.fileTree?.opened ?? true),
-        width: createMemo(() => store.fileTree?.width ?? DEFAULT_FILE_TREE_WIDTH),
-        open() {
-          if (!store.fileTree) {
-            setStore("fileTree", { opened: true, width: DEFAULT_FILE_TREE_WIDTH, tab: "changes" })
-
-            return
-          }
-
-          setStore("fileTree", "opened", true)
-        },
-        close() {
-          if (!store.fileTree) {
-            setStore("fileTree", { opened: false, width: DEFAULT_FILE_TREE_WIDTH, tab: "changes" })
-
-            return
-          }
-
-          setStore("fileTree", "opened", false)
-        },
-        toggle() {
-          if (!store.fileTree) {
-            setStore("fileTree", { opened: true, width: DEFAULT_FILE_TREE_WIDTH, tab: "changes" })
-
-            return
-          }
-
-          setStore("fileTree", "opened", (x) => !x)
-        },
-        resize(width: number) {
-          if (!store.fileTree) {
-            setStore("fileTree", { opened: true, width, tab: "changes" })
-
-            return
-          }
-
-          setStore("fileTree", "width", width)
-        },
-      },
       session: {
         width: createMemo(() => store.session?.width ?? DEFAULT_SESSION_WIDTH),
         resize(width: number) {

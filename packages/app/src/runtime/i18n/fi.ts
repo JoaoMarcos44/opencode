@@ -222,7 +222,6 @@ export const dict = {
   "command.context.addSelection": "Lisää valinta kontekstiin",
   "command.context.addSelection.description": "Lisää valitut rivit nykyisestä tiedostosta",
   "command.input.focus": "Kohdista syötekenttään",
-  "command.fileTree.toggle": "Näytä tai piilota tiedostopuu",
   "command.review.toggle": "Näytä tai piilota tarkistus",
   "command.message.previous": "Edellinen viesti",
   "command.message.previous.description": "Siirry edelliseen käyttäjän viestiin",

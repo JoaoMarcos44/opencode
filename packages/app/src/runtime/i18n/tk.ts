@@ -91,7 +91,6 @@ export const dict = {
   "command.context.addSelection": "Kontekste saýlama goşuň",
   "command.context.addSelection.description": "Häzirki faýldan saýlanan setirleri goşuň",
   "command.input.focus": "Giriş fokus",
-  "command.fileTree.toggle": "Faýl agajyny çalyşyň",
   "command.review.toggle": "Gözden geçiriň",
   "command.message.previous": "Öňki habar",
   "command.message.previous.description": "Öňki ulanyjy habaryna geçiň",

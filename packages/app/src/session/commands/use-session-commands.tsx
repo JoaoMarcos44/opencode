@@ -4,7 +4,6 @@ import { useDialog } from "@opencode/ui/context/dialog"
 import { previewSelectedLines } from "@opencode/session-ui/pierre/selection-bridge"
 import { useFile, selectionFromLines, type FileSelection } from "@/workspaces/files/model"
 import { useLanguage } from "@/runtime/i18n/language"
-import { useLayout } from "@/shell/state/layout"
 import { useComposerState } from "@/composer/persistence"
 import { useServerSDK } from "@/runtime/server/client"
 import { useData } from "@/runtime/server/current"
@@ -58,7 +57,6 @@ export const useSessionCommands = (actions: SessionCommandContext) => {
   const data = useData()
   const settings = useSettings()
   const platform = usePlatform()
-  const layout = useLayout()
   const extensionScoped = useExtensionScoped()
 
   const openDialog = async <T,>(load: () => Promise<T>, show: (value: T) => void) => {
@@ -66,8 +64,6 @@ export const useSessionCommands = (actions: SessionCommandContext) => {
     const value = await load()
     owner.run(() => show(value))
   }
-
-  const shown = settings.visibility.fileTree
 
   // The file the selected side tab shows; other tabs have no line selection.
   const activeFile = () => actions.region.selected()?.tab.file
@@ -478,16 +474,6 @@ export const useSessionCommands = (actions: SessionCommandContext) => {
               const bottom = actions.session.layout.view().bottom
               bottom.setOpened(!bottom.opened())
             },
-          }),
-        ]
-      : []),
-    ...(shown()
-      ? [
-          viewCommand({
-            id: "fileTree.toggle",
-            title: language.t("command.fileTree.toggle"),
-            keybind: "mod+\\",
-            onSelect: () => layout.fileTree.toggle(),
           }),
         ]
       : []),

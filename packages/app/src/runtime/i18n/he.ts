@@ -90,7 +90,6 @@ export const dict = {
   "command.context.addSelection": "הוסף בחירה להקשר",
   "command.context.addSelection.description": "הוסף שורות נבחרות מהקובץ הנוכחי",
   "command.input.focus": "מיקוד בשדה הקלט",
-  "command.fileTree.toggle": "הצגה או הסתרה של עץ הקבצים",
   "command.review.toggle": "הצגה או הסתרה של הסקירה",
   "command.message.previous": "הודעה קודמת",
   "command.message.previous.description": "עבור להודעת המשתמש הקודמת",

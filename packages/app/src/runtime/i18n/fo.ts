@@ -90,7 +90,6 @@ export const dict = {
   "command.context.addSelection": "Legg val til samanhang",
   "command.context.addSelection.description": "Legg valdar linjur til frá verandi fílu",
   "command.input.focus": "Fokus inntak",
-  "command.fileTree.toggle": "Skift fílutræ",
   "command.review.toggle": "Skift ummæli",
   "command.message.previous": "Fyrra boð",
   "command.message.previous.description": "Far til fyrru brúkaraboðini",

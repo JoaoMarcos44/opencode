@@ -111,7 +111,6 @@ export const dict = {
 
   "command.input.focus": "聚焦输入框",
 
-  "command.fileTree.toggle": "切换文件树",
 
   "command.review.toggle": "切换审查",
 

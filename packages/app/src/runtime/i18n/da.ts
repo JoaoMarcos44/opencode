@@ -228,7 +228,6 @@ export const dict = {
   "command.context.addSelection": "Tilføj markering til kontekst",
   "command.context.addSelection.description": "Tilføj markerede linjer fra den aktuelle fil",
   "command.input.focus": "Fokuser inputfelt",
-  "command.fileTree.toggle": "Skift filtræ",
   "command.review.toggle": "Skift gennemgang",
   "command.message.previous": "Forrige besked",
   "command.message.previous.description": "Gå til den forrige brugerbesked",

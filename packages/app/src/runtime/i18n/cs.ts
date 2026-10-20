@@ -90,7 +90,6 @@ export const dict = {
   "command.context.addSelection": "Přidejte výběr do kontextu",
   "command.context.addSelection.description": "Přidat vybrané řádky z aktuálního souboru",
   "command.input.focus": "Zaměření vstupu",
-  "command.fileTree.toggle": "Přepnout strom souborů",
   "command.review.toggle": "Přepnout recenzi",
   "command.message.previous": "Předchozí zpráva",
   "command.message.previous.description": "Přejděte na předchozí zprávu uživatele",

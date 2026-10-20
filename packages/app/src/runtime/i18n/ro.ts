@@ -90,7 +90,6 @@ export const dict = {
   "command.context.addSelection": "Adaugă selecția în context",
   "command.context.addSelection.description": "Adaugă liniile selectate din fișierul curent",
   "command.input.focus": "Focalizează pe câmpul de introducere",
-  "command.fileTree.toggle": "Comută arborele de fișiere",
   "command.review.toggle": "Comută revizuirea",
   "command.message.previous": "Mesajul anterior",
   "command.message.previous.description": "Mergi la mesajul anterior al utilizatorului",

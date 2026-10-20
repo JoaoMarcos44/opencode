@@ -91,7 +91,6 @@ export const dict = {
   "command.context.addSelection": "Shtoni përzgjedhjen në kontekst",
   "command.context.addSelection.description": "Shtoni linjat e zgjedhura nga skedari aktual",
   "command.input.focus": "Fokusoni hyrjen",
-  "command.fileTree.toggle": "Ndrysho pemën e skedarit",
   "command.review.toggle": "Aktivizo rishikimin",
   "command.message.previous": "Mesazhi i mëparshëm",
   "command.message.previous.description": "Shkoni te mesazhi i mëparshëm i përdoruesit",

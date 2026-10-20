@@ -95,7 +95,6 @@ export const dict = {
   "command.context.addSelection": "選択範囲をコンテキストに追加",
   "command.context.addSelection.description": "現在のファイルから選択した行を追加",
   "command.input.focus": "入力欄にフォーカス",
-  "command.fileTree.toggle": "ファイルツリーを切り替え",
   "command.review.toggle": "レビューの切り替え",
   "command.message.previous": "前のメッセージ",
   "command.message.previous.description": "前のユーザーメッセージに移動",

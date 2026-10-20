@@ -91,7 +91,6 @@ export const dict = {
   "command.context.addSelection": "Seçimi kontekstə əlavə et",
   "command.context.addSelection.description": "Cari fayldan seçilmiş sətirləri əlavə et",
   "command.input.focus": "Giriş sahəsinə fokusla",
-  "command.fileTree.toggle": "Fayl ağacını aç/bağla",
   "command.review.toggle": "İcmalı aç/bağla",
   "command.message.previous": "Əvvəlki mesaj",
   "command.message.previous.description": "Əvvəlki istifadəçi mesajına keç",

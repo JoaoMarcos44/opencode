@@ -91,7 +91,6 @@ export const dict = {
   "command.context.addSelection": "បន្ថែមការជ្រើសរើសទៅបរិបទ",
   "command.context.addSelection.description": "បន្ថែមបន្ទាត់ដែលបានជ្រើសរើសពីឯកសារបច្ចុប្បន្ន",
   "command.input.focus": "ការបញ្ចូលការផ្តោតអារម្មណ៍",
-  "command.fileTree.toggle": "បិទបើកមែកធាងឯកសារ",
   "command.review.toggle": "បិទ/បើកការពិនិត្យឡើងវិញ",
   "command.message.previous": "សារពីមុន",
   "command.message.previous.description": "ទៅកាន់សារអ្នកប្រើប្រាស់មុន។",

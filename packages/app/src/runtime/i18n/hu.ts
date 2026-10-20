@@ -103,7 +103,6 @@ export const dict = {
   "command.context.addSelection": "Kijelölés hozzáadása a kontextushoz",
   "command.context.addSelection.description": "Kijelölt sorok hozzáadása az aktuális fájlból",
   "command.input.focus": "Beviteli mező fókuszálása",
-  "command.fileTree.toggle": "Fájlfa váltása",
   "command.review.toggle": "Áttekintés átváltása",
   "command.message.previous": "Előző üzenet",
   "command.message.previous.description": "Ugrás az előző felhasználói üzenetre",

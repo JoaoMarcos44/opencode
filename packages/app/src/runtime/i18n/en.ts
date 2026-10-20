@@ -54,7 +54,6 @@ export const dict = {
   "command.context.addSelection": "Add selection to context",
   "command.context.addSelection.description": "Add selected lines from the current file",
   "command.input.focus": "Focus input",
-  "command.fileTree.toggle": "Toggle file tree",
   "command.review.toggle": "Toggle review",
   "command.sidebar.toggle": "Toggle sidebar",
   "command.bottom.toggle": "Toggle bottom panel",

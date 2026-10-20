@@ -100,7 +100,6 @@ export const dict = {
   "command.context.addSelection": "Tambahkan pilihan ke konteks",
   "command.context.addSelection.description": "Tambahkan baris yang dipilih dari berkas saat ini",
   "command.input.focus": "Fokuskan masukan",
-  "command.fileTree.toggle": "Alihkan pohon berkas",
   "command.review.toggle": "Alihkan tinjauan",
   "command.message.previous": "Pesan sebelumnya",
   "command.message.previous.description": "Pergi ke pesan pengguna sebelumnya",

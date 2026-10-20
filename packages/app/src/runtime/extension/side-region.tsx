@@ -40,8 +40,6 @@ import { ExtensionSlot } from "./render"
 import { createTabStripScroll } from "./tab-strip-scroll"
 import type { PaneDrag } from "./pane-drag"
 
-const FILE_TREE_WIDTH_MIN = 240
-
 const PANE_HEIGHT_MIN = 120
 
 /** The side region: the side pane, the pane split below it, and the inner sidebar. */
@@ -50,7 +48,6 @@ export function SideRegion(props: {
   screen: SessionScreen
   region: Region
   sidebar: PanelSidebar
-  fileTree: boolean
   present?: boolean
   size: Sizing
   drag: PaneDrag
@@ -62,20 +59,7 @@ export function SideRegion(props: {
   const isDesktop = createMediaQuery("(min-width: 768px)")
   const tabsOpen = createMemo(() => isDesktop() && view().side.opened())
   const tabsVisible = createMemo(() => tabsOpen() || !!props.present)
-  const fileOpen = createMemo(() => isDesktop() && props.fileTree)
-  const open = createMemo(() => tabsOpen() || fileOpen())
-  const visible = createMemo(() => tabsVisible() || fileOpen())
-  const fileTreeWidth = createMemo(() => Math.max(FILE_TREE_WIDTH_MIN, layout.fileTree.width()))
-
-  const panelWidth = createMemo(() => {
-    if (!visible()) return "0px"
-
-    if (tabsVisible()) return "auto"
-
-    return `${fileTreeWidth()}px`
-  })
-
-  const treeWidth = createMemo(() => (fileOpen() ? `${fileTreeWidth()}px` : "0px"))
+  const panelWidth = createMemo(() => (tabsVisible() ? "auto" : "0px"))
 
   const menu = createSessionPanelMenu()
   const primary = createMemo(() => menu().find((item) => item.primary))
@@ -111,7 +95,7 @@ export function SideRegion(props: {
   const lowerHeight = createMemo(() => Math.round(column.height * (1 - view().split.ratio())))
 
   createEffect(() => {
-    if (open()) return
+    if (tabsOpen()) return
     const active = document.activeElement
 
     if (!(active instanceof HTMLElement)) return
@@ -127,110 +111,70 @@ export function SideRegion(props: {
         id="review-panel"
         tabIndex={-1}
         aria-label={language.t("session.panel.reviewAndFiles")}
-        aria-hidden={!open()}
-        inert={!open()}
+        aria-hidden={!tabsOpen()}
+        inert={!tabsOpen()}
         class="relative h-full shrink-0 min-w-0 flex overflow-hidden bg-v2-background-bg-base rounded-[10px] shadow-[var(--v2-elevation-raised)] outline-none"
         classList={{
-          "pointer-events-none": !open(),
+          "pointer-events-none": !tabsOpen(),
           "flex-1": tabsVisible(),
         }}
         style={{ width: panelWidth() }}
       >
-        <Show when={visible()}>
+        <Show when={tabsVisible()}>
           <div
             data-slot="session-review-content"
             class="h-full flex shrink-0 contain-strict"
             style={{ width: "var(--session-side-content-width, 100%)" }}
           >
-            <Show when={tabsVisible()}>
-              <div
-                ref={stack}
-                class="relative min-w-0 h-full flex-1 flex flex-col overflow-hidden bg-v2-background-bg-base"
-              >
-                <For each={panes()}>
-                  {(pane, index) => (
-                    <div
-                      data-slot="session-side-pane"
-                      data-pane={pane}
-                      class="relative min-h-0 min-w-0 bg-v2-background-bg-base"
-                      classList={{
-                        "flex-1": panes().length === 1 || index() === 0,
-                        "shrink-0 border-t border-border-weaker-base": index() > 0,
-                      }}
-                      style={index() > 0 ? { height: `${lowerHeight()}px` } : undefined}
-                    >
-                      <Show when={index() > 0}>
-                        <div onPointerDown={() => props.size.start()}>
-                          <ResizeHandle
-                            direction="vertical"
-                            edge="start"
-                            size={lowerHeight()}
-                            min={PANE_HEIGHT_MIN}
-                            max={Math.max(PANE_HEIGHT_MIN, column.height - PANE_HEIGHT_MIN)}
-                            onResize={(height) => {
-                              props.size.touch()
-
-                              if (column.height > 0) view().split.resize(1 - height / column.height)
-                            }}
-                          />
-                        </div>
-                      </Show>
-                      <PaneTabs
-                        pane={props.region.pane(pane)}
-                        region={props.region}
-                        view={props.view}
-                        screen={props.screen}
-                        sidebar={props.sidebar}
-                        shown={tabsOpen}
-                        present={tabsVisible}
-                        animate={() => !props.size.active()}
-                        placeholder={index() === 0}
-                        actions={index() === 0}
-                        drag={props.drag}
-                      />
-                    </div>
-                  )}
-                </For>
-              </div>
-            </Show>
-
-            <Show when={fileOpen()}>
-              <div
-                id="file-tree-panel"
-                class="relative min-w-0 h-full shrink-0 overflow-hidden"
-                style={{ width: treeWidth() }}
-              >
-                <div
-                  class="h-full flex flex-col overflow-hidden group/filetree"
-                  classList={{ "border-l border-border-weaker-base": tabsOpen() }}
-                >
-                  <ExtensionSlot
-                    at="session.panel.sidebar"
-                    input={{
-                      get session() {
-                        return props.view
-                      },
-                      get screen() {
-                        return props.screen
-                      },
+            <div
+              ref={stack}
+              class="relative min-w-0 h-full flex-1 flex flex-col overflow-hidden bg-v2-background-bg-base"
+            >
+              <For each={panes()}>
+                {(pane, index) => (
+                  <div
+                    data-slot="session-side-pane"
+                    data-pane={pane}
+                    class="relative min-h-0 min-w-0 bg-v2-background-bg-base"
+                    classList={{
+                      "flex-1": panes().length === 1 || index() === 0,
+                      "shrink-0 border-t border-border-weaker-base": index() > 0,
                     }}
-                  />
-                </div>
-                <div onPointerDown={() => props.size.start()}>
-                  <ResizeHandle
-                    direction="horizontal"
-                    edge="start"
-                    size={fileTreeWidth()}
-                    min={FILE_TREE_WIDTH_MIN}
-                    max={480}
-                    onResize={(width) => {
-                      props.size.touch()
-                      layout.fileTree.resize(width)
-                    }}
-                  />
-                </div>
-              </div>
-            </Show>
+                    style={index() > 0 ? { height: `${lowerHeight()}px` } : undefined}
+                  >
+                    <Show when={index() > 0}>
+                      <div onPointerDown={() => props.size.start()}>
+                        <ResizeHandle
+                          direction="vertical"
+                          edge="start"
+                          size={lowerHeight()}
+                          min={PANE_HEIGHT_MIN}
+                          max={Math.max(PANE_HEIGHT_MIN, column.height - PANE_HEIGHT_MIN)}
+                          onResize={(height) => {
+                            props.size.touch()
+
+                            if (column.height > 0) view().split.resize(1 - height / column.height)
+                          }}
+                        />
+                      </div>
+                    </Show>
+                    <PaneTabs
+                      pane={props.region.pane(pane)}
+                      region={props.region}
+                      view={props.view}
+                      screen={props.screen}
+                      sidebar={props.sidebar}
+                      shown={tabsOpen}
+                      present={tabsVisible}
+                      animate={() => !props.size.active()}
+                      placeholder={index() === 0}
+                      actions={index() === 0}
+                      drag={props.drag}
+                    />
+                  </div>
+                )}
+              </For>
+            </div>
           </div>
         </Show>
       </aside>

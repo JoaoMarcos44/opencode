@@ -95,7 +95,6 @@ export const dict = {
   "command.context.addSelection": "Thêm lựa chọn vào ngữ cảnh",
   "command.context.addSelection.description": "Thêm các dòng đã chọn từ tệp hiện tại",
   "command.input.focus": "Tập trung vào ô nhập",
-  "command.fileTree.toggle": "Bật/tắt cây tệp",
   "command.review.toggle": "Bật/tắt phần xem lại",
   "command.message.previous": "Tin nhắn trước đó",
   "command.message.previous.description": "Đi tới tin nhắn người dùng trước đó",

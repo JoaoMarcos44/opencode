@@ -116,7 +116,6 @@ export const dict = {
   "command.context.addSelection": "Pridať výber do kontextu",
   "command.context.addSelection.description": "Pridať vybrané riadky z aktuálneho súboru",
   "command.input.focus": "Zamerať vstup",
-  "command.fileTree.toggle": "Prepnúť strom súborov",
   "command.review.toggle": "Prepnúť kontrolu",
   "command.message.previous": "Predchádzajúca správa",
   "command.message.previous.description": "Prejsť na predchádzajúcu správu používateľa",

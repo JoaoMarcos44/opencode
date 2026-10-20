@@ -98,7 +98,6 @@ export const dict = {
   "command.context.addSelection": "Добавить выделение в контекст",
   "command.context.addSelection.description": "Добавить выбранные строки из текущего файла",
   "command.input.focus": "Перейти к полю ввода",
-  "command.fileTree.toggle": "Переключить дерево файлов",
   "command.review.toggle": "Переключить обзор",
   "command.message.previous": "Предыдущее сообщение",
   "command.message.previous.description": "Перейти к предыдущему сообщению пользователя",

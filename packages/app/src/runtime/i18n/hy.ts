@@ -91,7 +91,6 @@ export const dict = {
   "command.context.addSelection": "Ավելացնել ընտրությունը համատեքստում",
   "command.context.addSelection.description": "Ավելացնել ընտրված տողերը ընթացիկ ֆայլից",
   "command.input.focus": "Կիզակետային մուտքագրում",
-  "command.fileTree.toggle": "Փոխարկել ֆայլի ծառը",
   "command.review.toggle": "Փոխարկել ակնարկ",
   "command.message.previous": "Նախորդ հաղորդագրություն",
   "command.message.previous.description": "Անցնել օգտվողի նախորդ հաղորդագրությունը",

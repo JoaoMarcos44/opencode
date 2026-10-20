@@ -294,7 +294,6 @@ export const dict = {
   "command.context.addSelection": "Voeg selectie toe aan context",
   "command.context.addSelection.description": "Voeg geselecteerde regels uit het huidige bestand toe",
   "command.input.focus": "Invoerveld activeren",
-  "command.fileTree.toggle": "Bestandsstructuur tonen of verbergen",
   "command.review.toggle": "Beoordeling tonen of verbergen",
   "command.message.previous": "Vorig bericht",
   "command.message.previous.description": "Ga naar het vorige gebruikersbericht",

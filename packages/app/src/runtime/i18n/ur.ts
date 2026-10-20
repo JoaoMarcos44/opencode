@@ -97,7 +97,6 @@ export const dict = {
   "command.context.addSelection": "سیاق و سباق میں انتخاب شامل کریں۔",
   "command.context.addSelection.description": "موجودہ فائل سے منتخب لائنیں شامل کریں۔",
   "command.input.focus": "ان پٹ پر توجہ دیں",
-  "command.fileTree.toggle": "فائل ٹری دکھائیں یا چھپائیں",
   "command.review.toggle": "جائزہ دکھائیں یا چھپائیں",
   "command.message.previous": "پچھلا پیغام",
   "command.message.previous.description": "صارف کے پچھلے پیغام پر جائیں",

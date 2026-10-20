@@ -91,7 +91,6 @@ export const dict = {
   "command.context.addSelection": "Tambah pilihan ke konteks",
   "command.context.addSelection.description": "Tambah baris terpilih dari fail semasa",
   "command.input.focus": "Fokus pada input",
-  "command.fileTree.toggle": "Togol pokok fail",
   "command.review.toggle": "Togol semakan",
   "command.message.previous": "Mesej sebelumnya",
   "command.message.previous.description": "Pergi ke mesej pengguna sebelumnya",

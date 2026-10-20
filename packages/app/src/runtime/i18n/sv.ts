@@ -288,7 +288,6 @@ export const dict = {
   "command.context.addSelection": "Lägg till markering i kontexten",
   "command.context.addSelection.description": "Lägg till markerade rader från den aktuella filen",
   "command.input.focus": "Fokusera inmatningsfältet",
-  "command.fileTree.toggle": "Växla filträdet",
   "command.review.toggle": "Växla granskning",
   "command.message.previous": "Föregående meddelande",
   "command.message.previous.description": "Gå till föregående användarmeddelande",

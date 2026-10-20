@@ -103,7 +103,6 @@ export const dict = {
   "command.context.addSelection": "Bættu vali við samhengi",
   "command.context.addSelection.description": "Bættu við völdum línum úr núverandi skrá",
   "command.input.focus": "Færa fókus í innslátt",
-  "command.fileTree.toggle": "Skiptu um skráartré",
   "command.review.toggle": "Skiptu um skoðun",
   "command.message.previous": "Fyrri skilaboð",
   "command.message.previous.description": "Farðu í fyrri notandaskilaboð",

@@ -91,7 +91,6 @@ export const dict = {
   "command.context.addSelection": "Προσθήκη επιλογής στο πλαίσιο",
   "command.context.addSelection.description": "Προσθήκη επιλεγμένων γραμμών από το τρέχον αρχείο",
   "command.input.focus": "Εισαγωγή εστίασης",
-  "command.fileTree.toggle": "Εναλλαγή δέντρου αρχείου",
   "command.review.toggle": "Εναλλαγή αναθεώρησης",
   "command.message.previous": "Προηγούμενο μήνυμα",
   "command.message.previous.description": "Μετάβαση στο προηγούμενο μήνυμα χρήστη",

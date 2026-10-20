@@ -95,7 +95,6 @@ export const dict = {
   "command.context.addSelection": "सन्दर्भमा चयन थप्नुहोस्",
   "command.context.addSelection.description": "हालको फाइलबाट चयन गरिएका रेखाहरू थप्नुहोस्",
   "command.input.focus": "फोकस इनपुट",
-  "command.fileTree.toggle": "फाइल रूख टगल गर्नुहोस्",
   "command.review.toggle": "समीक्षा टगल गर्नुहोस्",
   "command.message.previous": "अघिल्लो सन्देश",
   "command.message.previous.description": "अघिल्लो प्रयोगकर्ता सन्देशमा जानुहोस्",

@@ -90,7 +90,6 @@ export const dict = {
   "command.context.addSelection": "ምርጫ ወደ አውድ አክል",
   "command.context.addSelection.description": "የተመረጡትን መስመሮች ከአሁኑ ፋይል ያክሉ",
   "command.input.focus": "የትኩረት ግቤት",
-  "command.fileTree.toggle": "ፋይል ዛፍን ቀይር",
   "command.review.toggle": "ግምገማውን ቀይር",
   "command.message.previous": "የቀድሞ መልእክት",
   "command.message.previous.description": "ወደ ቀዳሚው የተጠቃሚ መልእክት ይሂዱ",

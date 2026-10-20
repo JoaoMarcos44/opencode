@@ -311,7 +311,6 @@ export const dict = {
   "command.context.addSelection": "Ajouter la sélection au contexte",
   "command.context.addSelection.description": "Ajouter les lignes sélectionnées du fichier actuel",
   "command.input.focus": "Activer la zone de saisie",
-  "command.fileTree.toggle": "Basculer l'arborescence des fichiers",
   "command.review.toggle": "Basculer la revue",
   "command.message.previous": "Message précédent",
   "command.message.previous.description": "Aller au message utilisateur précédent",

@@ -91,7 +91,6 @@ export const dict = {
   "command.context.addSelection": "Интихобро ба контекст илова кунед",
   "command.context.addSelection.description": "Аз файли ҷорӣ сатрҳои интихобшударо илова кунед",
   "command.input.focus": "Вуруди фокус",
-  "command.fileTree.toggle": "Гузариш кардани дарахти файл",
   "command.review.toggle": "Гузариш аз барраси",
   "command.message.previous": "Паёми қаблӣ",
   "command.message.previous.description": "Ба паёми пешинаи корбар гузаред",

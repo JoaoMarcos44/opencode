@@ -589,13 +589,6 @@ export interface SlotMap {
     /** The routed session; a new object when another session is routed. */
     readonly session: MountedSession
   }
-  /** The side region's inner sidebar, shown while it is open. */
-  readonly "session.panel.sidebar": {
-    /** The owning session screen; always present. */
-    readonly screen: SessionScreen
-    /** The routed session; a new object when another session is routed. */
-    readonly session: MountedSession
-  }
 }
 
 /** Content for one of the host's slots, typed by `at`. */

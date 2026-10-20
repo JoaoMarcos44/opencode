@@ -101,7 +101,6 @@ export const dict = {
   "command.context.addSelection": "སྐབས་དོན་ལུ་སེལ་འཐུ་ཁ་སྐོང་རྐྱབས།",
   "command.context.addSelection.description": "ད་ལྟོའི་ཡིག་སྣོད་ལས་སེལ་འཐུ་འབད་ཡོད་པའི་གྲལ་ཐིག་ཚུ་ཁ་སྐོང་རྐྱབས།",
   "command.input.focus": "ཆེད་དམིགས་ཨིན་པུཊི།",
-  "command.fileTree.toggle": "ཡིག་སྣོད་ཤིང་སོར་སྟོན་འབད།",
   "command.review.toggle": "བསྐྱར་ཞིབ་སོར་སྟོན་འབད།",
   "command.message.previous": "ཧེ་མའི་བརྡ་འཕྲིན།",
   "command.message.previous.description": "ཧེ་མའི་ལག་ལེན་པའི་འཕྲིན་དོན་ལུ་འགྱོ།",

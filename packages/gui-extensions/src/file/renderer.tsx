@@ -66,7 +66,6 @@ const setup: Setup<typeof File> = (ctx) => {
   const layout = ctx.layout
   const storage = ctx.storage
   const desktop = ctx.desktop
-  const tree = ctx.stores.tree
   const [handoff, setHandoff] = storage.memory<Handoff>("handoff", { initial: { sessions: {} } })
   const preference = desktop ? ctx.stores.app : undefined
   const [request, setRequest] = createStore<{ app?: OpenApp }>({})
@@ -178,13 +177,6 @@ const setup: Setup<typeof File> = (ctx) => {
   const shared: FileShared = {
     changes: ctx.uses.changes,
     browser: ctx.uses.browser,
-    tree: {
-      tab: () => tree.value.tab,
-      setTab: (tab) =>
-        tree.update((draft) => {
-          draft.tab = tab
-        }),
-    },
     filter: {
       get: (session) => filters[session]?.text ?? "",
       set: (session, value) => updateFilter(session, { text: value }),
@@ -252,14 +244,12 @@ const setup: Setup<typeof File> = (ctx) => {
 
   const FileBrowser = lazy(() => styled(import("./browser")))
   const MobileFiles = lazy(() => styled(import("./mobile")))
-  const Sidebar = lazy(() => styled(import("./sidebar")))
   const Tree = lazy(() => styled(import("./tree-v2")))
   const List = lazy(() => styled(import("./list")))
 
   onCleanup(
     onIdle(() => {
       void FileBrowser.preload()
-      void Sidebar.preload()
       void Tree.preload()
       void List.preload()
       void import("./resolve-link")
@@ -375,9 +365,6 @@ const setup: Setup<typeof File> = (ctx) => {
 
       focused.set(input.screen, input.tab.id)
       void input.screen.file.sync(fileTabPath(input.screen.file, input.tab.id), { silent: true })
-
-      // A restored file tab keeps the tree tab the user left, e.g. Changes across a reload.
-      if (!input.restored && tree.value.tab === "changes") shared.tree.setTab("all")
     },
   })
 
@@ -470,17 +457,6 @@ const setup: Setup<typeof File> = (ctx) => {
         </Show>
       )
     }),
-  })
-
-  ctx.add(Slot, {
-    at: "session.panel.sidebar",
-    render: (input) => (
-      <FileProvider>
-        <Suspense>
-          <Sidebar session={input.session} screen={input.screen} />
-        </Suspense>
-      </FileProvider>
-    ),
   })
 
   // The review panel lists its changed files with the browser's tree; it renders under this extension, on the
@@ -578,10 +554,7 @@ const setup: Setup<typeof File> = (ctx) => {
 
         if (!path) return
 
-        batch(() => {
-          open(session, path, { background: link.background })
-          shared.tree.setTab("all")
-        })
+        open(session, path, { background: link.background })
 
         return
       }
@@ -663,9 +636,6 @@ const setup: Setup<typeof File> = (ctx) => {
       })()
     },
   })
-
-  // Review reveals a change: the tree shows the changed files.
-  createKeyed(ctx.uses.changes, (changes) => onCleanup(changes.onReveal(() => shared.tree.setTab("changes"))))
 
   // A new workspace directory drops loaded files; reload the selected file tab.
   const root = createMemo<string | undefined>((previous) => ctx.screen.current()?.file.root ?? previous)

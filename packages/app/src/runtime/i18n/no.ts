@@ -294,7 +294,6 @@ export const dict = {
   "command.context.addSelection": "Legg til markering i kontekst",
   "command.context.addSelection.description": "Legg til valgte linjer fra gjeldende fil",
   "command.input.focus": "Fokuser inndata",
-  "command.fileTree.toggle": "Veksle filtre",
   "command.review.toggle": "Veksle gjennomgang",
   "command.message.previous": "Forrige melding",
   "command.message.previous.description": "Gå til forrige brukermelding",

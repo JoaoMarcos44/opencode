@@ -90,7 +90,6 @@ export const dict = {
   "command.context.addSelection": "Afegeix la selecció al context",
   "command.context.addSelection.description": "Afegeix les línies seleccionades del fitxer actual",
   "command.input.focus": "Entrada de focus",
-  "command.fileTree.toggle": "Commuta l'arbre de fitxers",
   "command.review.toggle": "Commuta la revisió",
   "command.message.previous": "Missatge anterior",
   "command.message.previous.description": "Aneu al missatge anterior de l'usuari",
