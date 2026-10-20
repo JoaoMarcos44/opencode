@@ -361,6 +361,7 @@ describe("ModelResolver", () => {
       get: () => Effect.succeed(provider),
     })
     const models = Layer.mock(Model.Service, {
+      free: true,
       get: () => Effect.succeed(selected),
     })
     const integrations = Layer.mock(Integration.Service, {

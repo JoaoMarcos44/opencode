@@ -75,9 +75,10 @@ opencode service set env OPENCODE_DISABLE_FREE_MODELS 1
 ```
 
 - Free models disappear from `/models` and the catalog, and are never chosen as the default.
+- Signed out, the OpenCode provider is disabled entirely. It reappears with its paid models after you connect an
+  OpenCode Console account or set `OPENCODE_API_KEY`.
 - A configured default that names a free model falls back to another available model.
 - A session, agent, or command that selects a free model fails with `Model unavailable`.
-- Paid `opencode` models still work with an OpenCode Console account or `OPENCODE_API_KEY`.
 
 ## Variants
 

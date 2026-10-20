@@ -101,6 +101,7 @@ const models = Layer.mock(SessionRunnerModel.Service)({
   },
 })
 const smallModels = Layer.mock(Model.Service, {
+  free: true,
   small: () => Effect.succeed(selectedSmall),
 })
 const it = testEffect(

@@ -27,9 +27,10 @@ import { withEnv } from "../fixture/env"
 import { emptyMcp } from "../fixture/mcp"
 import { drain } from "../lib/clock"
 import { testEffect } from "../lib/effect"
-import { PluginTestLayer } from "./fixture"
+import { makePluginTestLayer, PluginTestLayer } from "./fixture"
 
 const it = testEffect(PluginTestLayer)
+const withoutFree = testEffect(makePluginTestLayer(undefined, [Model.node.replace(Model.configured({ free: false }))]))
 
 const addPlugin = Effect.fn(function* () {
   const plugin = yield* Plugin.Service
@@ -2004,6 +2005,73 @@ describe("OpencodePlugin", () => {
         yield* addPlugin()
         expect(required(yield* catalog.get(Provider.ID.openai)).settings?.apiKey).toBeUndefined()
         expect(required(yield* models.get(Provider.ID.openai, Model.ID.make("paid"))).enabled).toBe(true)
+      }),
+    ),
+  )
+})
+
+describe("OpencodePlugin without free models", () => {
+  const seed = Effect.gen(function* () {
+    const catalog = yield* Provider.Service
+    yield* catalog.transform((catalog) => {
+      catalog.update(Provider.ID.opencode, () => {})
+      catalog.models.update(Provider.ID.opencode, Model.ID.make("free"), (draft) => {
+        draft.cost = cost(0)
+      })
+      catalog.models.update(Provider.ID.opencode, Model.ID.make("paid"), (draft) => {
+        draft.cost = cost(1)
+      })
+    })
+  })
+
+  withoutFree.effect("deactivates the provider when signed out until an account connects", () =>
+    withEnv({ OPENCODE_API_KEY: undefined }, () =>
+      Effect.gen(function* () {
+        const catalog = yield* Provider.Service
+        const models = yield* Model.Service
+        const integrations = yield* Integration.Service
+        const credentials = yield* Credential.Service
+        yield* seed
+        yield* addPlugin().pipe(Effect.provideService(HttpClient.HttpClient, noRemoteConfig))
+
+        expect(required(yield* catalog.get(Provider.ID.opencode)).settings?.apiKey).toBeUndefined()
+        expect((yield* catalog.available()).map((provider) => provider.id)).not.toContain(Provider.ID.opencode)
+        expect((yield* models.available()).some((model) => model.providerID === Provider.ID.opencode)).toBe(false)
+        expect((yield* integrations.get(Integration.ID.make("opencode")))?.methods.length).toBeGreaterThan(0)
+
+        yield* credentials.create({
+          integrationID: Integration.ID.make("opencode"),
+          value: Credential.Key.make({ type: "key", key: "secret" }),
+        })
+        const available = yield* eventually(models.available(), (models) =>
+          models.some((model) => model.providerID === Provider.ID.opencode),
+        )
+        expect((yield* catalog.available()).map((provider) => provider.id)).toContain(Provider.ID.opencode)
+        expect(available.filter((model) => model.providerID === Provider.ID.opencode).map((model) => model.id)).toEqual(
+          [Model.ID.make("paid")],
+        )
+      }),
+    ),
+  )
+
+  withoutFree.effect("keeps the provider with only paid models for OPENCODE_API_KEY", () =>
+    withEnv({ OPENCODE_API_KEY: "secret" }, () =>
+      Effect.gen(function* () {
+        const catalog = yield* Provider.Service
+        const models = yield* Model.Service
+        const integrations = yield* Integration.Service
+        yield* integrations.transform((editor) =>
+          editor.method.update({
+            integrationID: Integration.ID.make("opencode"),
+            method: { type: "env", names: ["OPENCODE_API_KEY"] },
+          }),
+        )
+        yield* seed
+        yield* addPlugin().pipe(Effect.provideService(HttpClient.HttpClient, noRemoteConfig))
+
+        expect((yield* catalog.available()).map((provider) => provider.id)).toContain(Provider.ID.opencode)
+        expect(required(yield* models.get(Provider.ID.opencode, Model.ID.make("paid"))).enabled).toBe(true)
+        expect(yield* models.get(Provider.ID.opencode, Model.ID.make("free"))).toBeUndefined()
       }),
     ),
   )

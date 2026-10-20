@@ -87,6 +87,7 @@ const referenceInstructions = Layer.mock(ReferenceInstructions.Service, {
 const mcpInstructions = Layer.mock(McpInstructions.Service, { load: () => Effect.succeed(Instructions.empty) })
 const config = Config.testLayer()
 const promptModels = Layer.mock(Model.Service, {
+  free: true,
   get: () => Effect.undefined,
   all: () => Effect.succeed([]),
   available: () => Effect.succeed([]),

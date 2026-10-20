@@ -72,6 +72,8 @@ export interface Editor {
 }
 
 export interface Interface extends State.Transformable<Editor> {
+  /** Whether the built-in free OpenCode models are offered; see `isFree`. */
+  readonly free: boolean
   readonly get: (providerID: Provider.ID, modelID: ID) => Effect.Effect<Info | undefined>
   readonly all: () => Effect.Effect<readonly Info[]>
   readonly available: () => Effect.Effect<readonly Info[]>
@@ -264,6 +266,7 @@ const layer = (options?: Options) =>
         Effect.forkScoped({ startImmediately: true }),
       )
       return Service.of({
+        free: options?.free !== false,
         transform: (update) => prepare.pipe(Effect.andThen(state.transform(update))),
         reload,
         get: Effect.fn("Model.get")((providerID, modelID) =>
