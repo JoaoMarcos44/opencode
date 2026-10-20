@@ -57,6 +57,28 @@ falls back to the newest available supported model.
 
 See [Config](/config) for configuration locations and precedence.
 
+## Free models
+
+Without an account or key, OpenCode offers the free [OpenCode](/console/models#free-models) models and defaults to one of
+them. A free model is an `opencode` model with no input price in the catalog.
+
+Set `OPENCODE_DISABLE_FREE_MODELS=1` on the server process to remove them:
+
+```bash
+OPENCODE_DISABLE_FREE_MODELS=1 opencode
+```
+
+For the shared background server, add the variable to its managed environment:
+
+```bash
+opencode service set env OPENCODE_DISABLE_FREE_MODELS 1
+```
+
+- Free models disappear from `/models` and the catalog, and are never chosen as the default.
+- A configured default that names a free model falls back to another available model.
+- A session, agent, or command that selects a free model fails with `Model unavailable`.
+- Paid `opencode` models still work with an OpenCode Console account or `OPENCODE_API_KEY`.
+
 ## Variants
 
 Variants are named options for one model, often used for reasoning effort or token budgets. Add `#variant` when selecting

@@ -1,4 +1,5 @@
 import { Database } from "@opencode/core/database/database"
+import { Model } from "@opencode/core/model"
 import { ModelsDev } from "@opencode/core/models-dev"
 import { PersistentPty } from "@opencode/core/persistent-pty"
 import { Schema } from "effect"
@@ -23,7 +24,7 @@ export const ServerOptions = Schema.Struct({
       persist: Schema.optional(Schema.Boolean),
     }),
   ),
-  models: Schema.optional(ModelsDev.Options),
+  models: Schema.optional(Schema.Struct({ ...ModelsDev.Options.fields, ...Model.Options.fields })),
   config: Schema.optional(
     Schema.Struct({
       directory: Schema.optional(Schema.String),

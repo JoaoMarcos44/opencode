@@ -25,6 +25,7 @@ import { Global } from "@opencode/util/global"
 import { InstructionDiscovery } from "@opencode/core/instruction-discovery"
 import { LocationServiceMap } from "@opencode/core/location-service-map"
 import { LocationActivity } from "@opencode/core/location-activity"
+import { Model } from "@opencode/core/model"
 import { ModelsDev } from "@opencode/core/models-dev"
 import { SessionRestart } from "@opencode/core/session/execution/restart"
 import { PluginUpdate } from "@opencode/core/plugin/update"
@@ -119,6 +120,7 @@ function makeRoutes<AuthError, AuthServices>(
     Bus.node.replace(Bus.configured({ persist: options.events?.persist })),
     App.node.replace(App.configured(options.app)),
     ModelsDev.node.replace(ModelsDev.configured(options.models)),
+    Model.node.replace(Model.configured({ free: options.models?.free })),
     Watcher.node.replace(Watcher.configured({ enabled: options.fs?.filewatcher })),
     FileSystemSearch.node.replace(FileSystemSearch.configured({ fff: options.fs?.fff })),
     Global.node.replace(Global.layerWith(options.config?.directory ? { config: options.config.directory } : {})),

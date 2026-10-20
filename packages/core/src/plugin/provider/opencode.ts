@@ -382,7 +382,7 @@ export const OpencodePlugin = define<HttpClient.HttpClient | Bus.Service | Manag
       )
       if (hasKey) return
       for (const model of models.list(item.provider.id)) {
-        if (!model.cost.some((cost) => cost.input > 0)) continue
+        if (Model.isFree(model)) continue
         models.update(item.provider.id, model.id, (draft) => {
           draft.enabled = false
         })
