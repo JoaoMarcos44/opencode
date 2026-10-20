@@ -3,7 +3,7 @@ export * as ConfigVariable from "./variable.js"
 import os from "os"
 import path from "path"
 import { Effect } from "effect"
-import { createScanner, type ParseError, parse, SyntaxKind } from "jsonc-parser"
+import { createScanner, type ParseError, parse } from "jsonc-parser"
 import { FSUtil } from "@opencode/util/fs-util"
 
 type ParseSource =
@@ -32,11 +32,11 @@ export const substitute = Effect.fn("ConfigVariable.substitute")(function* (inpu
       while (scanner.getPosition() <= offset) {
         scanner.scan()
       }
-      const token = scanner.getToken()
-      if (token === SyntaxKind.LineCommentTrivia || token === SyntaxKind.BlockCommentTrivia) {
+      const token = input.text[scanner.getTokenOffset()]
+      if (token === "/") {
         return JSON.stringify(value).slice(1, -1)
       }
-      if (token !== SyntaxKind.StringLiteral) return value
+      if (token !== '"') return value
       // Preserve raw JSON fragments and already escaped strings when another variable needs escaping.
       const errors: ParseError[] = []
       parse(`"${value}"`, errors, { disallowComments: true })
