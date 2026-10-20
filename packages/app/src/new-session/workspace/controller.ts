@@ -1,4 +1,3 @@
-import { debounce } from "@solid-primitives/scheduled"
 import { createEffect, createMemo, createResource, onCleanup } from "solid-js"
 import { createStore } from "solid-js/store"
 import { useWorkspaceLocation } from "@/workspaces/location"
@@ -62,13 +61,8 @@ export function createNewSessionWorkspaceController(input: {
   const tabs = useTabs()
 
   const [state, setState] = createStore({
-    branchesOpen: false,
-    search: "",
     existing: undefined as { projectID: string; directory: string } | undefined,
   })
-
-  const searchBranches = debounce((search: string) => setState("search", search.trim()), 100)
-  onCleanup(searchBranches.clear)
 
   const currentProject = createMemo(() => {
     const projectID = data.location.info({ directory: sdk().directory })?.project.id
@@ -178,26 +172,6 @@ export function createNewSessionWorkspaceController(input: {
   const projectRoot = createMemo(() => currentProject()?.worktree ?? sdk().directory)
   const branchDirectory = () => (value() === "create" ? projectRoot() : sdk().directory)
 
-  const [branches, branchActions] = createResource(
-    () =>
-      state.branchesOpen && value() === "create" && visible()
-        ? { directory: projectRoot(), search: state.search }
-        : undefined,
-    async (source) =>
-      serverSDK.api.vcs.branch
-        .list({ location: { directory: source.directory }, search: source.search, limit: 50 })
-        .then((response) => ({ ...source, items: response.data, failed: false }))
-        .catch(() => ({ ...source, items: [], failed: true })),
-  )
-
-  // Branch search must not suspend the draft or expose another project's previous results.
-  const branchResults = () => {
-    if (branches.state !== "ready" && branches.state !== "refreshing") return
-    const loaded = branches.latest
-
-    return loaded?.directory === projectRoot() && loaded.search === state.search ? loaded : undefined
-  }
-
   createEffect(() => {
     void Promise.all([
       data.location.syncInfo({ directory: sdk().directory }),
@@ -293,17 +267,10 @@ export function createNewSessionWorkspaceController(input: {
       visible,
       branch,
     },
-    branches: {
-      items: () => branchResults()?.items ?? [],
-      loading: () => branches.loading,
-      failed: () => branchResults()?.failed ?? false,
-      search: searchBranches,
-      open: (open: boolean) => {
-        searchBranches.clear()
-        setState({ branchesOpen: open, search: "" })
-      },
-      retry: () => branchActions.refetch(),
-    },
+    branches: (search: string, signal: AbortSignal) =>
+      serverSDK.api.vcs.branch
+        .list({ location: { directory: projectRoot() }, search, limit: 50 }, { signal })
+        .then((response) => response.data),
   }
 }
 

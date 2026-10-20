@@ -78,15 +78,15 @@ test("the combined location picker shows checkout branches and chooses the base 
   await expect(base).toBeVisible()
   expect(searches).toEqual([])
   await base.click()
-  const search = page.getByRole("textbox", { name: "Search branches", exact: true })
+  const search = page.getByRole("combobox", { name: "Search branches", exact: true })
   await expect(search).toBeFocused()
-  await expect(page.getByText("Loading", { exact: true })).toBeVisible()
+  await expect(search).toHaveAttribute("aria-busy", "true")
   await expect(newSessionLocation(page)).toBeVisible()
   listed.resolve(["timeline-quotes", "release/base", "origin/dev"])
-  await expect(page.getByRole("menuitemradio", { name: "release/base", exact: true })).toBeVisible()
+  await expect(page.getByRole("option", { name: "release/base", exact: true })).toBeVisible()
   await search.fill("release")
-  await expect(page.getByRole("menuitemradio")).toHaveText(["release/base"])
-  await page.getByRole("menuitemradio", { name: "release/base", exact: true }).click()
+  await expect(page.getByRole("option")).toHaveText(["release/base"])
+  await page.getByRole("option", { name: "release/base", exact: true }).click()
   const selected = screen.getByRole("button", { name: "from release/base", exact: true })
   await expect(selected).toBeVisible()
   await expect(view.editor).toBeFocused()
@@ -122,7 +122,7 @@ test("the combined location picker shows checkout branches and chooses the base 
   await expect(base).toBeVisible()
   await base.click()
   await expect(search).toBeFocused()
-  await page.getByRole("menuitemradio", { name: "origin/dev", exact: true }).click()
+  await page.getByRole("option", { name: "origin/dev", exact: true }).click()
   await expect(screen.getByRole("button", { name: "from origin/dev", exact: true })).toBeVisible()
   await view.editor.fill("Use the selected base")
   await submit(page).click()
@@ -133,6 +133,43 @@ test("the combined location picker shows checkout branches and chooses the base 
   await expect
     .poll(() => view.prompts)
     .toEqual([expect.objectContaining({ body: expect.objectContaining({ text: "Use the selected base" }) })])
+})
+
+test("branch search keeps results on screen while a query is pending", async ({ page }) => {
+  const held = Promise.withResolvers<string[]>()
+
+  await openWorktreeDraft(page, {
+    name: "BranchPending",
+    vcs: () => ({ current: "dev", default: "dev" }),
+    branches: (input) => (input.search ? held.promise : ["dev", "release/base", "release/next", "timeline-quotes"]),
+  })
+
+  await page.getByRole("button", { name: "from dev", exact: true }).click()
+  const search = page.getByRole("combobox", { name: "Search branches", exact: true })
+  const options = page.getByRole("option")
+  await expect(options).toHaveCount(4)
+  // Record any moment the list renders without rows, however brief.
+  await page.getByRole("listbox").evaluate((list) => {
+    const observer = new MutationObserver(() => {
+      if (!list.querySelector('[role="option"]')) list.setAttribute("data-emptied", "")
+    })
+    observer.observe(list, { childList: true, subtree: true })
+  })
+
+  await search.pressSequentially("release")
+  await expect(search).toHaveAttribute("aria-busy", "true")
+  await expect(options).toHaveText(["release/base", "release/next"])
+  await search.press("ControlOrMeta+a")
+  await search.press("Backspace")
+  await expect(options).toHaveCount(4)
+  await search.pressSequentially("quotes")
+  await expect(options).toHaveText(["timeline-quotes"])
+  await search.pressSequentially("-missing")
+  await expect(options).toHaveText(["timeline-quotes"])
+  await expect(page.getByRole("listbox")).not.toHaveAttribute("data-emptied")
+  held.resolve([])
+  await expect(page.getByText("No results found", { exact: true })).toBeVisible()
+  await expect(search).toHaveAttribute("aria-busy", "false")
 })
 
 test("the dark new session panel exposes no lighter background at its rounded corners", async ({ page }) => {
