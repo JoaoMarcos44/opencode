@@ -59,26 +59,21 @@ See [Config](/config) for configuration locations and precedence.
 
 ## Free models
 
-Without an account or key, OpenCode offers the free [OpenCode](/console/models#free-models) models and defaults to one of
-them. A free model is an `opencode` model with no input price in the catalog.
-
-Set `OPENCODE_DISABLE_FREE_MODELS=1` on the server process to remove them:
+Set `OPENCODE_DISABLE_FREE_MODELS=1` (or `true`) on the server process to hide [free OpenCode models](/console/models#free-models):
 
 ```bash
-OPENCODE_DISABLE_FREE_MODELS=1 opencode
+OPENCODE_DISABLE_FREE_MODELS=1 opencode serve
 ```
 
-For the shared background server, add the variable to its managed environment:
+For the shared background server:
 
 ```bash
 opencode service set env OPENCODE_DISABLE_FREE_MODELS 1
 ```
 
-- Free models disappear from `/models` and the catalog, and are never chosen as the default.
-- Signed out, the OpenCode provider is disabled entirely. It reappears with its paid models after you connect an
-  OpenCode Console account or set `OPENCODE_API_KEY`.
-- A configured default that names a free model falls back to another available model.
-- A session, agent, or command that selects a free model fails with `Model unavailable`.
+Free means an `opencode` or `opencode-go` model with no input price. These models disappear from the catalog and defaults;
+explicitly selecting one fails with `Model unavailable`. Signed out, the `opencode` provider is absent until you connect
+an OpenCode Console account or set `OPENCODE_API_KEY`, which restores its paid models.
 
 ## Variants
 

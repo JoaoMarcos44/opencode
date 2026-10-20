@@ -404,7 +404,6 @@ const layer = Layer.unwrap(
       }),
     ])
     const promptModels = Layer.mock(Model.Service, {
-      free: true,
       get: () => Effect.undefined,
       all: () => Effect.succeed([]),
       available: () => Effect.succeed([]),

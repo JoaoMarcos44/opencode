@@ -70,7 +70,7 @@ const permissionLayer = Layer.succeed(
   }),
 )
 
-export const makePluginTestLayer = (permission = permissionLayer, replacements: LayerNode.Replacements = []) =>
+export const makePluginTestLayer = (permission = permissionLayer) =>
   AppNodeBuilder.build(
     LayerNode.group([
       AppProcess.node,
@@ -119,7 +119,6 @@ export const makePluginTestLayer = (permission = permissionLayer, replacements: 
       Mcp.node.replace(emptyMcpLayer),
       Generate.node.replace(generateLayer),
       Permission.node.replace(permission),
-      ...replacements,
     ],
   ).pipe(Layer.provideMerge(configLayer))
 

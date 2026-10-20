@@ -117,7 +117,6 @@ const processEffect = Effect.fnUntraced(function* (options: Options) {
             url: process.env.OPENCODE_MODELS_URL,
             file: process.env.OPENCODE_MODELS_PATH,
             fetch: !truthy(process.env.OPENCODE_DISABLE_MODELS_FETCH),
-            free: !truthy(process.env.OPENCODE_DISABLE_FREE_MODELS),
           },
           config: {
             directory: process.env.OPENCODE_CONFIG_DIR,

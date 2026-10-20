@@ -37,7 +37,6 @@ const providers = Layer.mock(Provider.Service, {
   get: () => Effect.undefined,
 })
 const models = Layer.mock(Model.Service, {
-  free: true,
   get: () => Effect.succeed(selected),
 })
 const integrations = Layer.mock(Integration.Service, {
