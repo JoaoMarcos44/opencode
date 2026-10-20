@@ -38,8 +38,8 @@ export function NewSessionBranch(props: { workspace: NewSessionWorkspaceControll
         <Show
           when={creating()}
           fallback={
-            <div class="flex h-6 min-w-0 max-w-[220px] items-center gap-1.5 text-v2-text-text-faint">
-              <Icon name="branch" size="small" class="shrink-0 text-v2-icon-icon-muted" />
+            <div class="flex h-7 min-w-0 max-w-[220px] items-center gap-1.5 ps-1.5 pe-2 text-v2-text-text-faint">
+              <Icon name="branch" size="small" class="shrink-0 text-v2-icon-icon-faint" />
               <span ref={observe} dir="auto" class="min-w-0 truncate">
                 {label()}
               </span>
@@ -63,12 +63,12 @@ export function NewSessionBranch(props: { workspace: NewSessionWorkspaceControll
               props.onDone()
             }}
           >
-            <Menu.Trigger class="flex h-6 min-w-0 max-w-[220px] items-center gap-1.5 rounded-full bg-v2-background-bg-layer-02 px-2.5 text-[13px] font-[440] leading-[var(--line-height-compact)] tracking-[-0.04px] text-v2-text-text-faint transition-colors hover:bg-v2-background-bg-layer-03 hover:text-v2-text-text-muted focus-visible:bg-v2-background-bg-layer-03 focus-visible:text-v2-text-text-muted focus-visible:outline-none data-[expanded]:bg-v2-background-bg-layer-03 data-[expanded]:text-v2-text-text-muted">
+            <Menu.Trigger class="flex h-7 min-w-0 max-w-[220px] items-center gap-1.5 rounded-sm px-1.5 text-v2-text-text-muted transition-colors hover:bg-v2-overlay-simple-overlay-hover hover:text-v2-text-text-base focus-visible:bg-v2-overlay-simple-overlay-hover focus-visible:text-v2-text-text-base focus-visible:outline-none data-[expanded]:bg-v2-overlay-simple-overlay-pressed data-[expanded]:text-v2-text-text-base">
               <Icon name="branch-out" size="small" class="shrink-0 text-v2-icon-icon-muted" />
               <span ref={observe} dir="auto" class="min-w-0 truncate">
                 {label()}
               </span>
-              <Icon name="chevron-down" size="small" class="shrink-0 text-v2-icon-icon-muted" />
+              <Icon name="chevron-down" size="small" class="-ms-0.5 shrink-0 text-v2-icon-icon-muted" />
             </Menu.Trigger>
             <Menu.Portal>
               <Menu.Content

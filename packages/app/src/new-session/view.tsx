@@ -225,8 +225,8 @@ function NewSessionLocation(props: {
   }
 
   return (
-    <div class="relative z-0 -mt-3 flex min-h-12 min-w-0 items-center gap-3 rounded-xl bg-v2-background-bg-base px-2 pt-3 shadow-[inset_0_0_0_0.5px_var(--v2-border-border-base)] text-[13px] font-[440] leading-[var(--line-height-compact)] tracking-[-0.04px]">
-      <div class="flex min-w-0 max-w-full flex-wrap items-center gap-x-3 gap-y-1 py-1.5">
+    <div class="relative z-0 -mt-3 flex min-h-12 min-w-0 items-center gap-3 rounded-xl bg-v2-background-bg-base px-1.5 pt-3 shadow-[inset_0_0_0_0.5px_var(--v2-border-border-base)] text-[13px] font-[440] leading-[var(--line-height-compact)] tracking-[-0.04px]">
+      <div class="flex min-w-0 max-w-full flex-wrap items-center gap-1 py-1.5">
         <Tooltip
           appearance={props.onboarding ? "large" : undefined}
           placement="top"
@@ -252,7 +252,7 @@ function NewSessionLocation(props: {
             data-action="prompt-project"
             aria-haspopup="dialog"
             aria-description={language.t("session.new.workspace.trigger.tooltip")}
-            class="flex h-7 min-w-0 max-w-full items-center gap-1.5 rounded-md text-start ps-1.5 pe-2 text-v2-text-text-muted transition-colors hover:bg-v2-overlay-simple-overlay-hover hover:text-v2-text-text-base focus-visible:bg-v2-overlay-simple-overlay-hover focus-visible:text-v2-text-text-base focus-visible:outline-none"
+            class="flex h-7 min-w-0 max-w-full items-center gap-1.5 rounded-sm text-start ps-1.5 pe-2 text-v2-text-text-muted transition-colors hover:bg-v2-overlay-simple-overlay-hover hover:text-v2-text-text-base focus-visible:bg-v2-overlay-simple-overlay-hover focus-visible:text-v2-text-text-base focus-visible:outline-none"
             onClick={props.onClick}
           >
             <ProjectAvatar
@@ -285,7 +285,7 @@ function NewSessionLocation(props: {
       </div>
       <Show when={path()}>
         {(directory) => (
-          <div class="flex min-w-0 flex-1 justify-end @max-[560px]:hidden">
+          <div class="flex min-w-0 flex-1 justify-end pe-1.5 @max-[560px]:hidden">
             <Tooltip
               placement="top"
               value={directory()}
